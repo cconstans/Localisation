@@ -22,7 +22,7 @@ while ~isempty(varargin)
 end
 
 % This function return time and date associated with a file
-splitName = split(fileName, '_');
+splitName = strsplit(fileName, '_');
 dateString = splitName{cellNumber};
 
 dateN = datenum(dateString,formatIn);

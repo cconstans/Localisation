@@ -20,29 +20,71 @@
 % Last update 14/10/21 by @kevDuquette
 
 clear all
-close all
+% close all
 
 % Add all function located in the three to path
-addpath(genpath('../'));
+addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation_reseau\'));
 
 % Need to run data or just open it a .mat
 openData = false;
-
+AntenneCorrigee=0;
 % Path information : folderIn = wav folder / folderOut = figure output folder
-arrID = 'AAV';
+arrID = 'CLD';
+typeHL = 'LF';
+
 outName = 'defaultConfig';
-folderIn = ['~/Documents/MPO/BRing/Data/wav/' arrID '/']; % Local Mac folder
-folderOut = ['/Users/Administrator/Documents/MPO/BRing/Data/results/' arrID '/' outName '/'];
+
+[ptime, ploc]  = getPingInfo(arrID); % Load ping information
+
+switch arrID
+    case 'AAV'
+        folderIn = ['D:/Bring_Dep_1_Wav/' arrID '/' typeHL '/']; % Local Mac folder
+        startID=83; % take points from startID
+        thetaexcluded=[];
+         ptime = ptime + seconds(7);          % Add an offset to be center the 5 upcalls
+        Ns = 2^16;              % Total number of sample
+    case 'CLD'
+        folderIn = ['D:/Bring_Dep_1_Wav/' arrID '/' typeHL '/'];
+        startID=1;
+        thetaexcluded=[];
+         ptime = ptime + seconds(7);          % Add an offset to be center the 5 upcalls
+        Ns = 2^16;              % Total number of sample
+    case 'MLB'
+        folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
+        startID=1001;
+        thetaexcluded=[];
+                Ns = 2^14;              % Total number of sample
+    case 'PRC'
+        folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
+        startID=33;
+        thetaexcluded=[];
+        Ns = 2^14;              % Total number of sample
+
+end
+BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation_reseau\boatTrack\' arrID 'CircleTrack.mat'];
+load(BoatInfo);
+
+if ~isempty(thetaexcluded)
+    
+    idxrange= ~(angle<thetaexcluded(2) & angle>thetaexcluded(1));
+    angle=angle(idxrange);
+    time=time(idxrange);
+elseif startID
+    angle(1:startID-1)=[];
+    time(1:startID-1)=[];
+end
+
+if strcmp(arrID,'CLD')
+     time=time-days(1)-hours(8);
+end
+ptime=time;
+
+folderOut = ['C:/Users/CHARLOTTE/Documents/MATLAB/Bring/Localisation_reseau/results/' arrID '/' outName '/'];
 %pingFolder = ['/Users/Administrator/Documents/MPO/BRing/Data/results/' arrID '/prcCircle_Ns14_f150-200hz/'];
-%folderIn = ['Z:\DATA\missions\2021-07-27_IML_2021-016_BRings\wav\' arrID '\'];
+%folderIn = ['Z:\DATA\missions\2021-07-27_IML_2021-016_BRings\wav\' arrID '/'];
 
 % Loading files and time
 % Time must be in datetime format. The file to load will be automatically find
-%ptime = datetime(2021,07,15,00,00,00);
-%ptime = datetime(2021,07,15,00,00,00):seconds(5):datetime(2021,07,15,01,00,00);
-[ptime, ploc]  = getPingInfo(arrID); % Load ping information
-ptime = ptime + seconds(7);          % Add an offset to be center the 5 upcalls
-
 
 % Figure parameters
 showFig = []       % Figure number to print
@@ -51,7 +93,6 @@ printFig = false;    % Saving figure to a folder
 nbPk = 4 ;          % Nomber of side lobe to keep
 
 % Reading parameters
-Ns = 2^14;              % Total number of sample
 buffer = 0.4;             % Time in second to add before the ptime
 
 % Spectro parameter
@@ -69,15 +110,81 @@ if openData == true
     p = getRunData(pingFolder);
     %unpackStruct(p);  % Unpack structure to get same workspace as locateBring
 else
-    locateBring; % The main loop calculation are locate in this script
-    
+    if AntenneCorrigee
+        locateBring_deform;
+    else
+        locateBring; % The main loop calculation are locate in this script
+    end
     % Add some figure script located in ../plotScript
     
-    showAOACircle; 
+%     showAOACircle; 
     
+
+end
+showAOACircle;
+
+%%
+% err=mean(abs(angleM-angle)/360);
+% err=mean(min(abs(angleM-angleR'),abs(abs(angleM-angleR')-360))/360);
+% figure
+% h1=plot(angleM,'or');
+% hold on
+% % hTh = plot(x,0:36:360-36,'k-');
+% h2 = plot(angleR,'xb');
+% legend([h1,h2],{'Angle calculé','Angle théorique'})
+% if AntenneCorrigee
+%     
+%     title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+% else
+%     title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
+% end
+%%
+
+err=mean(min(abs(angleM-angle),abs(abs(angleM-angle)-360))/360);
+figure
+h1=plot(angleM,'or');
+hold on
+% hTh = plot(x,0:36:360-36,'k-');
+h2 = plot(angle,'xb');
+legend([h1,h2],{'Angle calculé','Angle théorique'})
+if AntenneCorrigee
+    
+    title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+else
+    title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
 end
 
 
+figure, 
+plot(angle,angle,'k')
+hold on, plot(angle,angleM,'rx')
+xlabel('Angle théorique (°)')
+ylabel('Angle calculé (°)')
+if AntenneCorrigee
+    title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+else
+    title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
+end
+
+
+figure, 
+plot(angleM-angle,'kx')
+hold on,
+plot([1 length(angle)],[0 0])
+ylabel('Angle calculé - angle théorique (°)')
+ylim([-20 20 ])
+
+% if AntenneCorrigee
+%     title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+% else
+%     title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
+% end
+% showAOACircle
+% Plot some side lobe
+% for ii=2:2
+%    hSl = plot(x,angleA(:,ii),'o') 
+% end
 %% Add some more specified line or figures related to you run
 % Enjoy!
 
+% showAOACircle

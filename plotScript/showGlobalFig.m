@@ -5,7 +5,7 @@ if any ( showFig == 7)
 
 if sum(diff(angleM(3:end-2)))< 0
     pNb = 10:-1:1;
-    angleA = fliplr(aMax3);
+%     angleA = fliplr(aMax3);
 else
     pNb = 1:10;
 end    
@@ -38,14 +38,15 @@ print([folderOut 'angleOfArrival_' outName '.png'],'-r150','-dpng')
 end
 
 if any ( showFig ==8)
-figure(8)
+    figure(8)
+    
+    plot(xc_rel,yc_rel,'o')
+        daspect([1 1 1 ])
 
-plot(xc,yc,'o')
-
-
-for ic = 1:length(xc)
-text(xc(ic)+0.2,yc(ic),num2str(ic),'fontsize',14)
-end
+    daspect([1 1 1 ])
+    for ic = 1:length(xc)
+        text(xc_rel(ic)+0.2,yc_rel(ic),num2str(ic),'fontsize',14)
+    end
 end
 
 if any ( showFig == 9)

@@ -50,7 +50,7 @@ ftime = getFileTime(name);
 % Start and end time
 start = time - ftime;
 tstart = ftime + start;
-istart = floor((seconds(start) - buffer) * Fs) ;
+istart = max(1,floor((seconds(start) - buffer) * Fs)) ;
 iend = istart + Ns -1;
 
 if iend < ainfo.TotalSamples
@@ -65,7 +65,7 @@ else
     % Loading the first file
     [Y1,Fs1] = audioread(fileName,[istart ainfo.TotalSamples]);
     
-    [fileList wavID] = getWavName(time + seconds(dura), fileparts(fileName));
+    [fileList wavID] = getWavName(time + seconds(dura), fileparts(fileName),filepath(end-1:end));
     [Y2,Fs2] = audioread(fileName,[1 overSample]);
     
     Y = [Y1; Y2];
