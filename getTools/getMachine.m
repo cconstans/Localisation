@@ -15,6 +15,8 @@ pwdname = pwd;
         
         if length(compName > 14) && strcmp(compName(1:14), 'WLQCIML0115503')
             machineName ='dellKev';
+        elseif strcmp(compName(1:15),'DESKTOP-AD28V4G')
+            machineName='cha';
         else
             % Add computer 25 or your own computer
             error ('Wrong path ! Add you machine to getMachine! ')

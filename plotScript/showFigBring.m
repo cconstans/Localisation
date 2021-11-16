@@ -63,7 +63,7 @@ if any( showFig == 3 )
     
     plot(x0,y0,'k+')
     hold on
-    plot(xc,yc,'r.','MarkerSize',12)
+    plot(xc_rel,yc_rel,'r.','MarkerSize',12)
     plot(x_cercle,y_cercle,'k')
     
     
@@ -73,11 +73,11 @@ if any( showFig == 3 )
     axis equal
     for u = 1 : length(xc)
         if strcmp(arrOri, 'clock')
-            a = atan2(xc(u),yc(u));
+            a = atan2(xc_rel(u),yc_rel(u));
             xx = R_source*sin(a);
             yy = R_source*cos(a);
         else
-            a = atan2(yc(u),xc(u));
+            a = atan2(yc_rel(u),xc_rel(u));
             xx = R_source*cos(a);
             yy = R_source*sin(a);
         end
@@ -99,6 +99,8 @@ if any( showFig == 3 )
     if printFig ==true
         print([folderOut 'energyFctAzimutCircle_' outName '_p' num2str(iFile)  '.png'], '-r150','-dpng', '-f3')
     end
+        title([arrID ' ' datestr(ptime(iFile),'HH:MM:SS')])
+
 end % end showfig3
 
 % ---------------------------------------------------------------------

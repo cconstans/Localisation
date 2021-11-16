@@ -25,7 +25,7 @@ end
 if iscell(fileName)
     for i=1:numel(fileName)
         % This function return time and date associated with a file
-        splitName = split(fileName{i}, '_');
+        splitName = strsplit(fileName{i}, '_');
         dateString = splitName{cellNumber};
         
         dateN = datenum(dateString,formatIn);
@@ -33,7 +33,7 @@ if iscell(fileName)
     end
 else
     % This function return time and date associated with a file
-    splitName = split(fileName, '_');
+    splitName = strsplit(fileName, '_');
     dateString = splitName{cellNumber};
     
     dateN = datenum(dateString,formatIn);

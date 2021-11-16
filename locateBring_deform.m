@@ -5,21 +5,19 @@
 % or by a get function [ploc, ptime ]  = getPingLoc('aav');
 %
 % The figure to plot can be specify by the argument showFig = [1 3 4..]
-% Figure code and description are located in showFigBring.m and
-% showGlobalFig.m
+% Figure code and description are located in showFigBring.m
 %
-% last update 7/10/2021 by @kevDuquette
 
 
 % -------------- Fixed variables --------------------
 
 % Loading file information
-[fileList, wavID] = getWavName(ptime, folderIn,typeHL);
+[fileList wavID] = getWavName(ptime, folderIn,typeHL);
 wavInfo = audioinfo([folderIn fileList{1}]);
 nbF = length(fileList);
 
 % Array information
-[arrLoc, offset, arrOri] = getArrLoc(arrID);
+% [arrLoc, offset, arrOri] = getArrLoc(arrID);
 
 % Spectro parameters
 % Spectro windows
@@ -53,17 +51,18 @@ R = 10;
 theta = 0: 2*pi/(Nc) : 2*pi-2*pi/(Nc);
 %offset = - (90-67) * pi /180; 
 % Set hydropohone location and oriemntation
-if strcmp(arrOri,'clock')
-    xc = R*sin(theta +  offset * pi /180);
-    yc = R*cos(theta +  offset* pi /180);
-elseif strcmp(arrOri,'counter')
-    xc = R*cos(theta +  offset* pi /180);
-    yc = R*sin(theta +  offset* pi /180);
+switch arrID
+    case 'AAV'
+        load('../../Data loc/AAV_filtOpt=0_211104_131035.mat','X','Y');
+    case 'MLB'
+        load('../../Data loc/MLB_filtOpt=0_211104_131415.mat','X','Y');
+    case 'PRC'
+        load('../../Data loc/PRC_filtOpt=0_211104_131656.mat','X','Y');
+    case 'CLD'
+        load('../../Data loc/CLD_filtOpt=0_211109_101636.mat','X','Y');
 end
-
-
-% Creating the output folder
-disp(['Creating output folder: ' folderOut]); mkdir(folderOut); 
+xc=X;
+yc=Y;
 
 %% File loop
 
@@ -73,9 +72,7 @@ angleA = nan(nbF,nbPk);
 %%
 for iFile =1:length(fileList)
     disp(['Executing beamforming for file ' num2str(iFile) '/' num2str(length(fileList))])
-    close all
-    
-    
+
     % Reading wav
     [MAT_s,fe, tstart, dura] = readBring([folderIn fileList{iFile}], ptime(iFile),'duration',duraNs,'buffer',buffer,'power2',true);
     file_wav = fileList{iFile};     % file name alone
@@ -128,7 +125,7 @@ for iFile =1:length(fileList)
     
     
     % Goniométrie -------------------> Figure 2,3
-    Energie = nan(1,length(vec_azimut));
+    Energie = [];
     df = vec_f(2) -vec_f(1);
     for u = 1 : length(vec_azimut)
         MAT_POND_vs_h_freq =squeeze(MAT_POND_vs_azim_h_freq(u,:,:));
@@ -147,9 +144,13 @@ for iFile =1:length(fileList)
     
     % Find peak of energy
     [pk pkloc] = findpeaks(Energie_NORM,'SortStr','descend','NPeaks', 4 );%'MinPeakHeight',0.3);
-    
+        if Energie_NORM(1)>Energie_NORM(pkloc(1)) && Energie_NORM(1)>Energie_NORM(end)
+        pkloc=[1 pkloc(1:3)];
+    elseif Energie_NORM(end)>Energie_NORM(pkloc(1)) && Energie_NORM(end)>Energie_NORM(1)
+        pkloc=[0 pkloc(1:3)];
+    end
     % Find the direction of source
-    angleA(iFile, : )  = pkloc;  % Angle of arrival with side lobe
+    angleA(iFile, 1:length(pkloc) )  = pkloc;  % Angle of arrival with side lobe
     angleM(1,iFile)  = pkloc(1);  % Max angle of arrival
 
    
@@ -161,16 +162,14 @@ for iFile =1:length(fileList)
     
 end % end loop on file
 
-
-
 % Show global figure
-showGlobalFig;
+% showGlobalFig;
 
 
 % Saving data
 if saveData == true
     if exist('angleR')
-        save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','angleR','ptime','matEnergie')
+        save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','angleR','ptime','ploc','matEnergie')
     else
         save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','ptime','matEnergie')
     end

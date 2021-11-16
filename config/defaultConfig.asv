@@ -28,12 +28,12 @@ machine=getMachine(cd);
 
 % Need to run data or just open it a .mat
 openData = false;
-AntenneCorrigee=0; % Choose to beamform with circular network (0) or corrected (1)
+AntenneCorrigee=1; % Choose to beamform with circular network (0) or corrected (1)
 arrID = 'CLD';
 outName = 'defaultConfig';
-[ptime, ploc]  = getPingInfo(arrID,machine); % Load ping information
+[ptime, ploc]  = getPingInfo(arrID); % Load ping information
 typeHL = 'LF';
-% DataToBeamform='all'; % Beamform all points from Boat Info
+% DataToBeamform='all';
 DataToBeamform='ping';
 
 % Path information : folderIn = wav folder / folderOut = figure output folder
@@ -44,7 +44,7 @@ switch machine
         
         ptime = ptime + seconds(7);          % Add an offset to be center the 5 upcalls
         Ns = 2^14;              % Total number of sample
-        
+
     case 'cha'
         folderOut = ['C:/Users/CHARLOTTE/Documents/MATLAB/Bring/Localisation_reseau/results/' arrID '/' outName '/'];
         
@@ -74,21 +74,19 @@ switch machine
         BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation_reseau_cha\boatTrack\' arrID 'CircleTrack.mat'];
         load(BoatInfo);
         
-        if strcmp(DataToBeamform,'all')
-            if ~isempty(thetaexcluded)
-                idxrange= ~(angle<thetaexcluded(2) & angle>thetaexcluded(1));
-                angle=angle(idxrange);
-                time=time(idxrange);
-            elseif startID
-                angle(1:startID-1)=[];
-                time(1:startID-1)=[];
-            end
-            
-            if strcmp(arrID,'CLD')
-                time=time-days(1)-hours(8);
-            end
-            ptime=time;
+        if ~isempty(thetaexcluded)
+            idxrange= ~(angle<thetaexcluded(2) & angle>thetaexcluded(1));
+            angle=angle(idxrange);
+            time=time(idxrange);
+        elseif startID
+            angle(1:startID-1)=[];
+            time(1:startID-1)=[];
         end
+        
+        if strcmp(arrID,'CLD')
+            time=time-days(1)-hours(8);
+        end
+%         ptime=time; % Uncomment to beamform all datapoints from Boatinfo
 end
 %pingFolder = ['/Users/Administrator/Documents/MPO/BRing/Data/results/' arrID '/prcCircle_Ns14_f150-200hz/'];
 %folderIn = ['Z:\DATA\missions\2021-07-27_IML_2021-016_BRings\wav\' arrID '\'];
@@ -126,42 +124,42 @@ else
         locateBring_deform;
     else
         locateBRing; % The main loop calculation are locate in this script
-    end
+    end    
     showAOACircle;
     
 end
 
 
 %% Add some more specified line or figures related to you run
-if strcmp(DataToBeamform,'all')
-    
-    err=mean(min(abs(angleM-angle),abs(abs(angleM-angle)-360))/360);
-    figure
-    h1=plot(angleM,'or');
-    hold on
-    h2 = plot(angle,'xb');
-    legend([h1,h2],{'Angle calculé','Angle théorique'})
-    if AntenneCorrigee
-        title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
-    else
-        title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
-    end
-    
-    figure,
-    plot(angle,angle,'k')
-    hold on, plot(angle,angleM,'rx')
-    xlabel('Angle théorique (°)')
-    ylabel('Angle calculé (°)')
-    if AntenneCorrigee
-        title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
-    else
-        title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
-    end
-    
-    figure,
-    plot(angleM-angle,'kx')
-    hold on,
-    plot([1 length(angle)],[0 0])
-    ylabel('Angle calculé - angle théorique (°)')
-    ylim([-20 20 ])
+
+err=mean(min(abs(angleM-angle),abs(abs(angleM-angle)-360))/360);
+figure
+h1=plot(angleM,'or');
+hold on
+h2 = plot(angle,'xb');
+legend([h1,h2],{'Angle calculé','Angle théorique'})
+if AntenneCorrigee
+    title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+else
+    title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
 end
+
+
+figure, 
+plot(angle,angle,'k')
+hold on, plot(angle,angleM,'rx')
+xlabel('Angle théorique (°)')
+ylabel('Angle calculé (°)')
+if AntenneCorrigee
+    title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+else
+    title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
+end
+
+
+figure, 
+plot(angleM-angle,'kx')
+hold on,
+plot([1 length(angle)],[0 0])
+ylabel('Angle calculé - angle théorique (°)')
+ylim([-20 20 ])

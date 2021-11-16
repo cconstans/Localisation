@@ -1,4 +1,4 @@
-function [time, ploc] = getPingInfo(dataID,varargin)
+function [time, ploc] = getPingInfo(dataID,machine,varargin)
 % [ploc, ptime ]  = getPingLoc('cav')
 % This fonction return the location and time of any set of ping emission
 % For circular ping, the ping number 1 is located the most north
@@ -60,23 +60,37 @@ switch lower(dataID)
             49.1895 64.8355;
             49.1917 64.8381;
             49.1945 64.8378;];
-            % 49.1931 64.8314                   % Center array emission
-        time=[ datetime(2021,07,15,14,25,05);      % Two emission at same locaion
-            datetime(2021,07,15,14,29,08);
-            datetime(2021,07,15,14,31,55);
-            datetime(2021,07,15,14,34,07);
-            datetime(2021,07,15,14,36,42);  % Also a 39:31
-            datetime(2021,07,15,14,39,31); 
-            datetime(2021,07,15,14,42,44);  % Alos 42:44
-            datetime(2021,07,15,14,46,10);
-            datetime(2021,07,15,14,19,10);
-            datetime(2021,07,15,14,22,41);
-            %datetime(2021,07,15,14,51,20);     % Center array emission         
-            ];
-        case 'mlb'   % -------- Circle at Malbay -----------
+        % 49.1931 64.8314                   % Center array emission
+        
+        if strcmp(machine,'cha')
+            time=[ datetime(2021,07,14,06,25,05);      % Two emission at same locaion
+                datetime(2021,07,14,06,29,08);
+                datetime(2021,07,14,06,31,55);
+                datetime(2021,07,14,06,34,07);
+                datetime(2021,07,14,06,36,42);  % Also a 39:31
+                datetime(2021,07,14,06,39,31);
+                datetime(2021,07,14,06,42,44);  % Alos 42:44
+                datetime(2021,07,14,06,46,10);
+                datetime(2021,07,14,06,19,10);
+                datetime(2021,07,14,06,22,41); ];
+        else
+            time=[ datetime(2021,07,15,14,25,05);      % Two emission at same locaion
+                datetime(2021,07,15,14,29,08);
+                datetime(2021,07,15,14,31,55);
+                datetime(2021,07,15,14,34,07);
+                datetime(2021,07,15,14,36,42);  % Also a 39:31
+                datetime(2021,07,15,14,39,31);
+                datetime(2021,07,15,14,42,44);  % Alos 42:44
+                datetime(2021,07,15,14,46,10);
+                datetime(2021,07,15,14,19,10);
+                datetime(2021,07,15,14,22,41);
+                %datetime(2021,07,15,14,51,20);     % Center array emission
+                ];
+        end
+    case 'mlb'   % -------- Circle at Malbay -----------
         % Malbay ping have been made by an knock on the boat
         ploc = [48.6084 64.1863;
-                48.6076 64.1824;
+            48.6076 64.1824;
                 48.6053 64.1800;
                 48.6025 64.1966;
                 48.6002 64.1823;
@@ -267,7 +281,7 @@ disp('Printing map')
             load GSL_bathy_500m.mat;
             load gebco_colormap.dat;
         catch
-            error("Cant not load bathy file.")
+            error('Cant not load bathy file.')
         end
     end
     

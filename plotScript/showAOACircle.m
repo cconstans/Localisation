@@ -6,6 +6,8 @@ else
 end    
     
 % Linéaire regression
+if angleM(1)>angleM(2) angleM(1)=angleM(1)-360; end
+
 x = 1:10;
 p = polyfit(x,angleM,1);
 angleFit = polyval(p,x);  
@@ -17,6 +19,12 @@ hold on
 hTh = plot(x,0:36:360-36,'k-');
 hFit = plot(x,angleFit);
 
+if AntenneCorrigee
+    
+    title([arrID ' forme corrigée'] )
+else
+    title([arrID ' forme circulaire'] )
+end
 % Plot some side lobe
 for ii=2:2
    hSl = plot(x,angleA(:,ii),'o') 
