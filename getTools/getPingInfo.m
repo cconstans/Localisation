@@ -254,7 +254,7 @@ switch lower(dataID)
             datetime(2021,07,31,08,56,26);
             datetime(2021,07,31,09,44,19);
             datetime(2021,07,31,10,45,10);
-            datetime(2021,07,31,12,08,11)];;
+            datetime(2021,07,31,12,08,11)];
     otherwise
         error(['Can''t location ID. Refer to heater.' ])
 end

@@ -53,13 +53,13 @@ theta = 0: 2*pi/(Nc) : 2*pi-2*pi/(Nc);
 % Set hydropohone location and oriemntation
 switch arrID
     case 'AAV'
-        load('../../Data loc/AAV_filtOpt=0_211104_131035.mat','X','Y');
+        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/AAV_filtOpt=0_211104_131035.mat','X','Y');
     case 'MLB'
-        load('../../Data loc/MLB_filtOpt=0_211104_131415.mat','X','Y');
+        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/MLB_filtOpt=0_211104_131415.mat','X','Y');
     case 'PRC'
-        load('../../Data loc/PRC_filtOpt=0_211104_131656.mat','X','Y');
+        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/PRC_filtOpt=0_211104_131656.mat','X','Y');
     case 'CLD'
-        load('../../Data loc/CLD_filtOpt=0_211109_101636.mat','X','Y');
+        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/CLD_filtOpt=0_211109_101636.mat','X','Y');
 end
 xc=X;
 yc=Y;
@@ -69,6 +69,7 @@ yc=Y;
 % _Pre-Initialisation
 matEnergie = nan(nbF,360);
 angleA = nan(nbF,nbPk);
+angleM = nan(nbF,1);
 %%
 for iFile =1:length(fileList)
     disp(['Executing beamforming for file ' num2str(iFile) '/' num2str(length(fileList))])
@@ -151,14 +152,14 @@ for iFile =1:length(fileList)
     end
     % Find the direction of source
     angleA(iFile, 1:length(pkloc) )  = pkloc;  % Angle of arrival with side lobe
-    angleM(1,iFile)  = pkloc(1);  % Max angle of arrival
+    angleM(iFile)  = pkloc(1);  % Max angle of arrival
 
    
     % Keep the energie value in a matrix
     matEnergie(iFile, :) = Energie;
     
     % Printing figure
-    showFigBring;
+    show_fig_ship;
     
 end % end loop on file
 
@@ -167,10 +168,6 @@ end % end loop on file
 
 
 % Saving data
-if saveData == true
-    if exist('angleR')
-        save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','angleR','ptime','ploc','matEnergie')
-    else
-        save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','ptime','matEnergie')
-    end
+if saveData
+        save([folderOut '.mat'],'laps','angleA','angleM','ptime','matEnergie', 'jour','mois','heure','minute','duree','arrID','fmin_int','fmax_int','AntenneCorrigee')
 end

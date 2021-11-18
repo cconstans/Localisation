@@ -100,7 +100,7 @@ end
 
 
 % Figure parameters
-showFig = []       % Figure number to print
+showFig = [3 8]       % Figure number to print
 saveData = false;   % Save result to .mat
 printFig = false;    % Saving figure to a folder
 nbPk = 4 ;          % Nomber of side lobe to keep

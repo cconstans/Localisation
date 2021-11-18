@@ -63,17 +63,19 @@ end
 
 
 % Creating the output folder
-disp(['Creating output folder: ' folderOut]); mkdir(folderOut); 
+% disp(['Creating output folder: ' folderOut]); mkdir(folderOut); 
 
 %% File loop
 
 % _Pre-Initialisation
 matEnergie = nan(nbF,360);
 angleA = nan(nbF,nbPk);
+angleM = nan(nbF,1);
+
 %%
 for iFile =1:length(fileList)
     disp(['Executing beamforming for file ' num2str(iFile) '/' num2str(length(fileList))])
-    close all
+%     close all
     
     
     % Reading wav
@@ -149,15 +151,15 @@ for iFile =1:length(fileList)
     [pk pkloc] = findpeaks(Energie_NORM,'SortStr','descend','NPeaks', 4 );%'MinPeakHeight',0.3);
     
     % Find the direction of source
-    angleA(iFile, : )  = pkloc;  % Angle of arrival with side lobe
-    angleM(1,iFile)  = pkloc(1);  % Max angle of arrival
+    angleA(iFile, 1:length(pkloc) )  = pkloc;  % Angle of arrival with side lobe
+    angleM(iFile)  = pkloc(1);  % Max angle of arrival
 
    
     % Keep the energie value in a matrix
     matEnergie(iFile, :) = Energie;
     
     % Printing figure
-    showFigBring;
+    show_fig_ship;
     
 end % end loop on file
 
@@ -168,10 +170,6 @@ showGlobalFig;
 
 
 % Saving data
-if saveData == true
-    if exist('angleR')
-        save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','angleR','ptime','matEnergie')
-    else
-        save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','ptime','matEnergie')
-    end
+if saveData
+        save([folderOut '.mat'],'laps','angleA','angleM','ptime','matEnergie', 'jour','mois','heure','minute','duree','arrID','fmin_int','fmax_int','AntenneCorrigee')
 end
