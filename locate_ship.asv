@@ -1,0 +1,118 @@
+% clear all
+
+% Add all function located in the three to path
+addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
+
+% Need to run data or just open it a .mat
+openData = false;
+% Path information : folderIn = wav folder / folderOut = figure output folder
+typeHL = 'LF';
+AntenneCorrigee=1;
+saveData=1;
+
+% arrID = 'MLB';
+% ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_MLB_1608_7_9h.mat';
+ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat';
+% ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX/ 'nom_sauvegarde];
+load(ship_AIS_file);
+
+% jour=16;
+% mois=8;
+heure=7;
+minute=50;
+duree=3600;
+
+% arrID=site;
+switch arrID
+    case 'AAV'
+        folderIn = ['D:/Bring_Dep_1_Wav/' arrID '/' typeHL '/']; % Local Mac folder
+    case 'CLD'
+        folderIn = ['D:/Bring_Dep_1_Wav/' arrID '/' typeHL '/'];
+    case 'MLB'
+        folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
+    case 'PRC'
+        folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
+
+end
+folderOut=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\' arrID '_' num2str(jour) '0' num2str(mois) '_' num2str(heure) '_' num2str(round(heure+duree/3600)) 'h_' datestr(now,'yymmdd_HHMMSS')];
+if ~AntenneCorrigee
+    folderOut=[folderOut,'_circ'];
+end
+  Ns = 2^16;              % Total number of sample
+laps=30;
+Ntime=duree/laps;
+clear ptime
+ptime(1)=datetime(2021,mois,jour,heure,minute,0);
+
+for it=2:Ntime
+ptime(it)=datetime(ptime(it-1)+seconds(laps));
+end
+
+% Figure parameters
+showFig = [ 2 3 8]       % Figure number to print
+printFig = false;    % Saving figure to a folder
+nbPk = 4 ;          % Nomber of side lobe to keep
+
+% Reading parameters
+buffer = 0.4;             % Time in second to add before the ptime
+
+% Spectro parameter
+% Frequence min and max
+fmin_int = 50;
+fmax_int = 200;
+
+
+% If wanted to open alredy run script
+if openData == true
+    disp('Opening already run data')
+    p = getRunData(pingFolder);
+else
+    if AntenneCorrigee
+        locateBring_deform;
+    else
+        locateBRing; % The main loop calculation are locate in this script
+    end
+end
+%%
+% load(ship_AIS_file);
+
+[angle, dist] = getRealAngle(arrID , vec_lat_ship, vec_long_ship);
+
+figure, 
+plot(vec_temps_ship/(24*3600),angle),datetick('x')
+hold on,  plot(ptime,angleM);
+ylim([0 360]), title([ arrID, ' azimuth'])
+% subplot(122), 
+figure,plot(vec_temps_ship/(24*3600),dist/1e3)
+datetick('x'),title([ arrID, ' distance (km)'])
+
+% figure,
+% polar(0,0,'or'); 
+% % xlim([-max(dist) max(dist)]), ylim([-max(dist) max(dist)])
+% for ii=1:length(vec_temps_ship)
+%     hold on, polar(deg2rad(angle(ii)),dist(ii)/max(dist),'rx');
+%     pause(0.1);
+%     title(num2str(ii))
+% end
+
+
+    videoName = [ship_AIS_file(1:end-4)  ];
+    writerObj = VideoWriter([ videoName '.mp4'],'MPEG-4');
+    writerObj.FrameRate = 10 ;
+    writerObj.Quality = 100;
+    open(writerObj)
+    
+figure,
+plot(loc_site(2),loc_site(1),'or'); 
+text(loc_site(2),loc_site(1)+0.01,arrID,'Color','r');
+xlim([min(vec_long_ship) max(vec_long_ship)]), ylim([min(vec_lat_ship) max(vec_lat_ship)])
+for ii=1:length(vec_temps_ship)
+    hold on, plot(vec_long_ship(ii), vec_lat_ship(ii),'kx');
+    title(datestr(vec_temps_ship(ii)/24/3600))
+    
+        h = gcf;
+        F = getframe(h);
+        writeVideo(writerObj,F)
+        close
+end
+    close(writerObj)
