@@ -51,16 +51,29 @@ R = 10;
 theta = 0: 2*pi/(Nc) : 2*pi-2*pi/(Nc);
 %offset = - (90-67) * pi /180; 
 % Set hydropohone location and oriemntation
+% switch arrID
+%     case 'AAV'
+%         load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/AAV_filtOpt=0_211104_131035.mat','X','Y');
+%     case 'MLB'
+%         load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/MLB_filtOpt=0_211104_131415.mat','X','Y');
+%     case 'PRC'
+%         load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/PRC_filtOpt=0_211104_131656.mat','X','Y');
+%     case 'CLD'
+%         load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/CLD_filtOpt=0_211109_101636.mat','X','Y');
+% end
+
+
 switch arrID
     case 'AAV'
-        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/AAV_filtOpt=0_211104_131035.mat','X','Y');
+        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/AAVv2_filtOpt=0_c0=1480.mat','X','Y');
     case 'MLB'
-        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/MLB_filtOpt=0_211104_131415.mat','X','Y');
+        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/MLBv2_filtOpt=0_c0=1480.mat','X','Y');
     case 'PRC'
-        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/PRC_filtOpt=0_211104_131656.mat','X','Y');
+        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/PRCv2_filtOpt=0_c0=1480.mat','X','Y');
     case 'CLD'
-        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/CLD_filtOpt=0_211109_101636.mat','X','Y');
+        load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/CLDv2_filtOpt=0_c0=1480.mat','X','Y');
 end
+
 xc=X;
 yc=Y;
 

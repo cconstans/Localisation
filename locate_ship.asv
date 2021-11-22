@@ -1,4 +1,4 @@
-% clear all
+clear
 
 % Add all function located in the three to path
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
@@ -9,18 +9,24 @@ openData = false;
 typeHL = 'LF';
 AntenneCorrigee=1;
 saveData=1;
+bateau='JJ'
 
+switch bateau
+    case 'JJ'
 % arrID = 'MLB';
-% ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_MLB_1608_7_9h.mat';
+% ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat';
 ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat';
+% ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316004433_PRC_508_22_24h.mat';
+% ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316023339_PRC_1408_22_24h.mat';
 % ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX/ 'nom_sauvegarde];
+
 load(ship_AIS_file);
 
 % jour=16;
 % mois=8;
-heure=7;
-minute=50;
-duree=3600;
+% heure=22;
+% minute=0;
+% duree=3600*2;
 
 % arrID=site;
 switch arrID
@@ -39,7 +45,7 @@ if ~AntenneCorrigee
     folderOut=[folderOut,'_circ'];
 end
   Ns = 2^16;              % Total number of sample
-laps=30;
+laps=120;
 Ntime=duree/laps;
 clear ptime
 ptime(1)=datetime(2021,mois,jour,heure,minute,0);
@@ -49,7 +55,7 @@ ptime(it)=datetime(ptime(it-1)+seconds(laps));
 end
 
 % Figure parameters
-showFig = [ 2 3 8]       % Figure number to print
+showFig = [ ]       % Figure number to print
 printFig = false;    % Saving figure to a folder
 nbPk = 4 ;          % Nomber of side lobe to keep
 
@@ -59,7 +65,7 @@ buffer = 0.4;             % Time in second to add before the ptime
 % Spectro parameter
 % Frequence min and max
 fmin_int = 50;
-fmax_int = 200;
+fmax_int = 1800;
 
 
 % If wanted to open alredy run script
@@ -80,39 +86,19 @@ end
 
 figure, 
 plot(vec_temps_ship/(24*3600),angle),datetick('x')
-hold on,  plot(ptime,angleM);
-ylim([0 360]), title([ arrID, ' azimuth'])
-% subplot(122), 
-figure,plot(vec_temps_ship/(24*3600),dist/1e3)
-datetick('x'),title([ arrID, ' distance (km)'])
-
-% figure,
-% polar(0,0,'or'); 
-% % xlim([-max(dist) max(dist)]), ylim([-max(dist) max(dist)])
-% for ii=1:length(vec_temps_ship)
-%     hold on, polar(deg2rad(angle(ii)),dist(ii)/max(dist),'rx');
-%     pause(0.1);
-%     title(num2str(ii))
-% end
-
-
-    videoName = [ship_AIS_file(1:end-4)  ];
-    writerObj = VideoWriter([ videoName '.mp4'],'MPEG-4');
-    writerObj.FrameRate = 10 ;
-    writerObj.Quality = 100;
-    open(writerObj)
-    
-figure,
-plot(loc_site(2),loc_site(1),'or'); 
-text(loc_site(2),loc_site(1)+0.01,arrID,'Color','r');
-xlim([min(vec_long_ship) max(vec_long_ship)]), ylim([min(vec_lat_ship) max(vec_lat_ship)])
-for ii=1:length(vec_temps_ship)
-    hold on, plot(vec_long_ship(ii), vec_lat_ship(ii),'kx');
-    title(datestr(vec_temps_ship(ii)/24/3600))
-    
-        h = gcf;
-        F = getframe(h);
-        writeVideo(writerObj,F)
-        close
+hold on,  plot(ptime,angleM,'rx');
+ylim([0 360]), 
+if AntenneCorrigee
+    title([ arrID, ' azimuth ' num2str(mmsi_ship)])
+else
+    title([ arrID, ' non corrigée azimuth ' num2str(mmsi_ship)])
 end
-    close(writerObj)
+    legend('AIS','Bring')
+    
+% subplot(122), 
+% figure,plot(vec_temps_ship/(24*3600),dist/1e3)
+% datetick('x'),title([ arrID, ' distance (km)'])
+
+
+
+%     videoName = [ship_AIS_file(1:end-4)  ];

@@ -7,22 +7,37 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 openData = false;
 % Path information : folderIn = wav folder / folderOut = figure output folder
 typeHL = 'LF';
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 saveData=1;
+bateau='TB';
 
+switch bateau
+    case 'JJ'
+        ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat';
+        load(ship_AIS_file);
+        
+        heure=7;
+        minute=55;
+        duree=3600*1;
+    case 'Nacc'
+        ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_MLB_508_6_9h.mat';
+        load(ship_AIS_file);
+        
+        heure=6;
+        minute=55;
+        duree=3600*1;
+    case 'TB'
+        ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316023339_MLB_1408_22_24h.mat';
+        load(ship_AIS_file);
+        
+        heure=22;
+        minute=0;
+        duree=3600*2;
+end
 % arrID = 'MLB';
-% ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat';
-% ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat';
-% ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316004433_PRC_508_22_24h.mat';
-ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316023339_PRC_1408_22_24h.mat';
 % ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX/ 'nom_sauvegarde];
-load(ship_AIS_file);
 
-% jour=16;
-% mois=8;
-heure=22;
-minute=0;
-duree=3600*2;
+
 
 % arrID=site;
 switch arrID

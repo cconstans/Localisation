@@ -62,18 +62,18 @@ switch lower(dataID)
             49.1945 64.8378;];
         % 49.1931 64.8314                   % Center array emission
         
-        if strcmp(machine,'cha')
-            time=[ datetime(2021,07,14,06,25,05);      % Two emission at same locaion
-                datetime(2021,07,14,06,29,08);
-                datetime(2021,07,14,06,31,55);
-                datetime(2021,07,14,06,34,07);
-                datetime(2021,07,14,06,36,42);  % Also a 39:31
-                datetime(2021,07,14,06,39,31);
-                datetime(2021,07,14,06,42,44);  % Alos 42:44
-                datetime(2021,07,14,06,46,10);
-                datetime(2021,07,14,06,19,10);
-                datetime(2021,07,14,06,22,41); ];
-        else
+%         if strcmp(machine,'cha')
+%             time=[ datetime(2021,07,14,06,25,05);      % Two emission at same locaion
+%                 datetime(2021,07,14,06,29,08);
+%                 datetime(2021,07,14,06,31,55);
+%                 datetime(2021,07,14,06,34,07);
+%                 datetime(2021,07,14,06,36,42);  % Also a 39:31
+%                 datetime(2021,07,14,06,39,31);
+%                 datetime(2021,07,14,06,42,44);  % Alos 42:44
+%                 datetime(2021,07,14,06,46,10);
+%                 datetime(2021,07,14,06,19,10);
+%                 datetime(2021,07,14,06,22,41); ];
+%         else
             time=[ datetime(2021,07,15,14,25,05);      % Two emission at same locaion
                 datetime(2021,07,15,14,29,08);
                 datetime(2021,07,15,14,31,55);
@@ -86,7 +86,7 @@ switch lower(dataID)
                 datetime(2021,07,15,14,22,41);
                 %datetime(2021,07,15,14,51,20);     % Center array emission
                 ];
-        end
+%         end
     case 'mlb'   % -------- Circle at Malbay -----------
         % Malbay ping have been made by an knock on the boat
         ploc = [48.6084 64.1863;
