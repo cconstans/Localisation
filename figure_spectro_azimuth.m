@@ -26,10 +26,13 @@ caxis([ SPL_min_to_plot SPL_max_to_plot])
 colorbar
 colormap jet
 
+%% bathy
+load(ship_AIS_file);
+quickMap([vec_lat_ship,loc_site(1)], [vec_long_ship,loc_site(2)]);
 
 %% video
 
-videoName = [ship_AIS_file(1:end-4)  ];
+% videoName = [ship_AIS_file(1:end-4)  ];
 %     videoName='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_MLB_PRC_1608_7_9h';
 
 %     writerObj = VideoWriter([ videoName '.mp4'],'MPEG-4');
@@ -37,20 +40,20 @@ videoName = [ship_AIS_file(1:end-4)  ];
 %     writerObj.Quality = 100;
 %     open(writerObj)
 
-figure,
-plot(loc_site(2),loc_site(1),'or');
-text(loc_site(2),loc_site(1)+0.01,arrID,'Color','r');
-% hold on,plot(loc_PRC(2),loc_PRC(1),'or');
-% text(loc_PRC(2),loc_PRC(1)+0.01,'PRC','Color','r');
-xlim([min(vec_long_ship) max(vec_long_ship)]), ylim([min(vec_lat_ship) max(vec_lat_ship)])
-for ii=1:length(vec_temps_ship)
-    hold on, plot(vec_long_ship(ii), vec_lat_ship(ii),'kx');
-    title(datestr(vec_temps_ship(ii)/24/3600))
-    
-    %         h = gcf;
-    %         F = getframe(h);
-    %         writeVideo(writerObj,F)
-end
+% figure,
+% plot(loc_site(2),loc_site(1),'or');
+% text(loc_site(2),loc_site(1)+0.01,arrID,'Color','r');
+% % hold on,plot(loc_PRC(2),loc_PRC(1),'or');
+% % text(loc_PRC(2),loc_PRC(1)+0.01,'PRC','Color','r');
+% xlim([min(vec_long_ship) max(vec_long_ship)]), ylim([min(vec_lat_ship) max(vec_lat_ship)])
+% for ii=1:length(vec_temps_ship)
+%     hold on, plot(vec_long_ship(ii), vec_lat_ship(ii),'kx');
+%     title(datestr(vec_temps_ship(ii)/24/3600))
+%     pause(0.1)
+%     %         h = gcf;
+%     %         F = getframe(h);
+%     %         writeVideo(writerObj,F)
+% end
 %     close(writerObj)
 
 %% Angles

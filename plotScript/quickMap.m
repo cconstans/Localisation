@@ -44,7 +44,7 @@ ax = usamap(latlim, lonlim);
 setm(ax, 'MLabelParallel', 43.5)
 
 geoshow(coastlat,coastlon, ...
-    "DisplayType","polygon","FaceColor",[0.45 0.60 0.30])
+    'DisplayType','polygon','FaceColor',[0.45 0.60 0.30])
 
 geoshow(lat, lon, 'DisplayType' , 'point')
 end
@@ -62,15 +62,15 @@ if strcmp(type , 'mmap')
     
     try
         % Read bathymetry
-        load Documents/MATLAB/Oceanographie/m_map/mmap_ex/GSL_bathy_500m.mat;
-        load Documents/MATLAB/Oceanographie/m_map/mmap_ex/gebco_colormap.dat;
+        load C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\m_map/mmap_ex/GSL_bathy_500m.mat;
+        load C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\m_map/mmap_ex/gebco_colormap.dat;
     catch
         try
             % Read bathymetry
             load GSL_bathy_500m.mat;
             load gebco_colormap.dat;
         catch
-            error("Cant not load bathy file.")
+            error('Can not load bathy file.')
         end
     end
     

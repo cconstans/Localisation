@@ -7,56 +7,16 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 openData = false;
 % Path information : folderIn = wav folder / folderOut = figure output folder
 typeHL = 'LF';
-AntenneCorrigee=1;
+AntenneCorrigee=0;
 saveData=1;
-bateau='TB';
+bateau='OCEANEXCONNAIGRA';
+arrID='AAV';
 
-switch bateau
-    case 'JJ'
-        ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat';
-        load(ship_AIS_file);
-        
-        heure=7;
-        minute=55;
-        duree=3600*1;
-    case 'Nacc'
-        ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_MLB_508_6_9h.mat';
-        load(ship_AIS_file);
-        
-        heure=6;
-        minute=55;
-        duree=3600*1;
-    case 'TB'
-        ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316023339_MLB_1408_22_24h.mat';
-        load(ship_AIS_file);
-        
-        heure=22;
-        minute=0;
-        duree=3600*2;
-end
-% arrID = 'MLB';
-% ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX/ 'nom_sauvegarde];
+[ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
+    vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
-
-
-% arrID=site;
-switch arrID
-    case 'AAV'
-        folderIn = ['D:/Bring_Dep_1_Wav/' arrID '/' typeHL '/']; % Local Mac folder
-    case 'CLD'
-        folderIn = ['D:/Bring_Dep_1_Wav/' arrID '/' typeHL '/'];
-    case 'MLB'
-        folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
-    case 'PRC'
-        folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
-
-end
-folderOut=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\' arrID '_' num2str(jour) '0' num2str(mois) '_' num2str(heure) '_' num2str(round(heure+duree/3600)) 'h_' datestr(now,'yymmdd_HHMMSS')];
-if ~AntenneCorrigee
-    folderOut=[folderOut,'_circ'];
-end
   Ns = 2^16;              % Total number of sample
-laps=120;
+laps=60;
 Ntime=duree/laps;
 clear ptime
 ptime(1)=datetime(2021,mois,jour,heure,minute,0);
@@ -76,16 +36,19 @@ buffer = 0.4;             % Time in second to add before the ptime
 % Spectro parameter
 % Frequence min and max
 fmin_int = 50;
-fmax_int = 1800;
+fmax_int = 1500;
 
+folderOut=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\' arrID '_' num2str(jour) '0' num2str(mois) '_' num2str(heure) '_' num2str(round(heure+duree/3600)) 'h_f=[' num2str(fmin_int) '_' num2str(fmax_int) ']_' datestr(now,'yymmdd_HHMMSS')];
+if ~AntenneCorrigee
+    folderOut=[folderOut,'_circ'];
+end
 
-% If wanted to open alredy run script
 if openData == true
     disp('Opening already run data')
     p = getRunData(pingFolder);
 else
     if AntenneCorrigee
-        locateBring_deform;
+        locate_Bring_deform;
     else
         locateBRing; % The main loop calculation are locate in this script
     end
@@ -94,17 +57,29 @@ end
 % load(ship_AIS_file);
 
 [angle, dist] = getRealAngle(arrID , vec_lat_ship, vec_long_ship);
+idx_deb=find(vec_temps_ship/(24*3600)>=datenum(ptime(1)),1); 
+idx_fin=find(vec_temps_ship/(24*3600)>datenum(ptime(end)),1);
+if isempty(idx_fin) idx_fin=length(vec_temps_ship); end
 
-figure, 
-plot(vec_temps_ship/(24*3600),angle),datetick('x')
-hold on,  plot(ptime,angleM,'rx');
-ylim([0 360]), 
+figure
+pcolor(arrIncol(datenum(ptime)), 1:360, 10*log10(matEnergie'))
+shading flat
+cb = colorbar('location','eastoutside');
+ylabel(cb, 'Energy (dB)');
+colormap jet
+hold on
+hm = plot(ptime,angleM,'o','color','k','markersize',3,'markerfacecolor','k');hold on
+hm2 = plot(vec_temps_ship(idx_deb:idx_fin)/(24*3600),angle(idx_deb:idx_fin),'k','LineWidth',2);
+% datetick('x');
+
+% hold on,  plot(ptime,angleM,'rx');
+% ylim([0 360]), 
 if AntenneCorrigee
-    title([ arrID, ' azimuth ' num2str(mmsi_ship)])
+    title([ bateau ' ' arrID ' f=[' num2str(fmin_int) '-' num2str(fmax_int) '] Hz'])
 else
-    title([ arrID, ' non corrigée azimuth ' num2str(mmsi_ship)])
+    title([ bateau ' ' arrID, ' f=[' num2str(fmin_int) '-' num2str(fmax_int) '] Hz non corrigée ' ])
 end
-    legend('AIS','Bring')
+%     legend('Energy','AIS','Bring')
     
 % subplot(122), 
 % figure,plot(vec_temps_ship/(24*3600),dist/1e3)

@@ -8,7 +8,7 @@ colorO = ax.ColorOrder;
 legGroup = [];
 legName = {};
 
-pcolor(arrIncol(ptime), 1:360, 10*log10(matEnergie'))
+pcolor(arrIncol(datenum(ptime)), 1:360, 10*log10(matEnergie'))
 shading flat
 cb = colorbar('location','eastoutside');
 ylabel(cb, 'Energy (dB)');
@@ -31,6 +31,7 @@ legName = {legName{:}, 'Real boat azimuht'};
 end
 
 % Result points
+hold on
 hm = plot(ptime,angleM,'o','color','r','markersize',5,'markerfacecolor','r');
 legGroup = [legGroup hm];
 legName = {legName{:} 'Boat azimuth'};
