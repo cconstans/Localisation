@@ -11,3 +11,7 @@
 # /localConfig 
 
 /configDell
+/results
+*.mat
+*.mp4
+*.asv
