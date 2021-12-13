@@ -159,6 +159,16 @@ else
 end
 
 
+folderOut=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\estim_loc_' bateau ];
+if ~AntenneCorrigee
+    folderOut=[folderOut,'_circ'];
+end
+
+delta_lat=y_ship/R_T_km*180/pi;
+delta_long=x_ship/R_T_km*180/pi/cosd(loc_MLB(1));
+lat_ship=loc_MLB(1)+delta_lat;
+long_ship=loc_MLB(2)+delta_long;
+save(folderOut,'vec_temps_ship','x_ship','y_ship','lat_ship','long_ship','anglePRC','angleMLB','dist2PRC','dist2MLB','distPRC_ais','distMLB_ais','anglePRC_ais','angleMLB_ais','ptime');
 %%
 % dist_estime_PRC=dist2PRC*1e3;
 % dist_estime_MLB=dist2MLB*1e3;

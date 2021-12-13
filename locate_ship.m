@@ -7,10 +7,11 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 openData = false;
 % Path information : folderIn = wav folder / folderOut = figure output folder
 typeHL = 'LF';
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 saveData=1;
-bateau='OCEANEXCONNAIGRA';
-arrID='AAV';
+bateau='TENACITYVENTURE';
+arrID='CLD';
+
 
 [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
@@ -55,6 +56,9 @@ else
 end
 %%
 % load(ship_AIS_file);
+
+[ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
+    vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
 [angle, dist] = getRealAngle(arrID , vec_lat_ship, vec_long_ship);
 idx_deb=find(vec_temps_ship/(24*3600)>=datenum(ptime(1)),1); 
