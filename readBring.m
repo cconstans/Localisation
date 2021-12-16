@@ -40,7 +40,7 @@ end
 if power2 == true
     p = nextpow2(Ns);
     Ns = 2.^p;
-    dura = Ns * Fs;
+    dura = Ns / Fs;
 end
 
 
@@ -60,13 +60,9 @@ if istart > 0 && iend < ainfo.TotalSamples
     %Y = Y(istart:iend,:);
 elseif istart < 0
    % Loading the first file
-<<<<<<< HEAD
    [fileName2 wavID] = getWavName(time - seconds(dura), fileparts(fileName),filepath(end-1:end)); 
    [Y1,Fs1] = audioread([filepath '/' char(fileName2)],[ainfo.TotalSamples + istart ainfo.TotalSamples]);
-=======
-   [fileName2 wavID] = getWavName(time - seconds(dura), fileparts(fileName)); 
-   [Y1,Fs1] = audioread(fileName2,[ainfo.TotalSamples+istart ainfo.TotalSamples]);
->>>>>>> upstream/mac-first-branch
+
     
    [Y2,Fs2] = audioread(fileName,[1 iend]);
     

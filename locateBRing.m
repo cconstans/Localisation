@@ -189,27 +189,19 @@ for iFile =1:length(fileList)
     [pk pkloc] = findpeaks(Energie_NORM,'SortStr','descend','NPeaks', 4 );%'MinPeakHeight',0.3);
     
     % Find the direction of source
-<<<<<<< HEAD
-    angleA(iFile, 1:length(pkloc) )  = pkloc;  % Angle of arrival with side lobe
-    angleM(iFile)  = pkloc(1);  % Max angle of arrival
-=======
+
     if length(pkloc) < nbPk; pkloc= [pkloc nan(1,nbPk - numel(pkloc)  )] ;end
         
     angleA(iFile, : )  = pkloc;  % Angle of arrival with side lobe
     angleM(1,iFile)  = pkloc(1);  % Max angle of arrival
->>>>>>> upstream/mac-first-branch
 
    
     % Keep the energie value in a matrix
     matEnergie(iFile, :) = Energie;
     
     % Printing figure
-<<<<<<< HEAD
-    show_fig_ship;
-    
-=======
+
     save_showFig_211203;
->>>>>>> upstream/mac-first-branch
 end % end loop on file
 
 

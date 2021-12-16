@@ -5,18 +5,14 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 
-site='MLB';
+site='CLD';
 video=0;
 % method=1; %0: supress angles when 1 hydro is overlagged. 1: suppress only overlags.
 
-Fmin=500;
-Fmax=2000;
+Fmin=50;
+Fmax=1800;
 typeHL='LF';
 c0=1480;
-
-Nboats=4;
-filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\' site 'v4_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
-
 
 switch site
     case 'AAV'
@@ -26,12 +22,12 @@ switch site
         Z0=39.1;
         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_1807_10_13h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_AAV_1907_2_4h',...
-            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_AAV_1907_10_12h',...
-            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BEVERLYMI_AAV_2307_0_24h'};
-        timelim=[datenum(2021,07,18,11,45,0)*24*3600,datenum(2021,07,18,12,45,0)*24*3600;...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_AAV_1907_10_12h'};
+%             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BEVERLYMI_AAV_2307_0_24h'};
+        timelim=[datenum(2021,07,18,11,45,0)*24*3600,datenum(2021,07,18,12,35,0)*24*3600;...
            datenum(2021,07,19,2,15,0)*24*3600,datenum(2021,07,19,3,15,0)*24*3600 ;...
-            datenum(2021,07,19,10,25,0)*24*3600,datenum(2021,07,19,10,40,0)*24*3600;...
-            datenum(2021,07,23,5,55,0)*24*3600,datenum(2021,07,23,6,20,0)*24*3600];
+            datenum(2021,07,19,10,25,0)*24*3600,datenum(2021,07,19,10,40,0)*24*3600];
+%             datenum(2021,07,23,5,55,0)*24*3600,datenum(2021,07,23,6,20,0)*24*3600];
 
     case 'CLD'
         folderIn = ['D:/Bring_Dep_1_Wav/' site '/' typeHL '/'];
@@ -40,12 +36,12 @@ switch site
         Z0=43.6;
        ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_CLD_1807_10_12h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_CLD_1907_0_3h',...
-            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_CLD_1907_8_10h',...
-            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BEVERLYMI_CLD_2307_6_8h'};
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_CLD_1907_8_10h'};
+%             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BEVERLYMI_CLD_2307_6_8h'};
         timelim=[datenum(2021,07,18,10,20,0)*24*3600,datenum(2021,07,18,11,20,0)*24*3600;...
-            datenum(2021,07,19,1,0,0)*24*3600,datenum(2021,07,19,2,0,0)*24*3600 ;...
-            datenum(2021,07,19,8,45,0)*24*3600,datenum(2021,07,19,9,30,0)*24*3600;...
-            datenum(2021,07,23,7,15,0)*24*3600,datenum(2021,07,23,7,40,0)*24*3600];
+            datenum(2021,07,19,1,17,0)*24*3600,datenum(2021,07,19,2,07,0)*24*3600 ;...
+            datenum(2021,07,19,9,12,0)*24*3600,datenum(2021,07,19,9,35,0)*24*3600];
+%             datenum(2021,07,23,7,15,0)*24*3600,datenum(2021,07,23,7,40,0)*24*3600];
     case 'MLB'
         folderIn = ['F:\Bring_Dep_2\' site '_wav\'];
         startID=1001;
@@ -76,6 +72,8 @@ switch site
 end
 
 Nboats=length(ship_AIS_file);
+filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\' site 'v4_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
+
 BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTrack.mat'];
 
 load(BoatInfo);

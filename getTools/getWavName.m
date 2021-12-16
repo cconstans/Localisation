@@ -1,22 +1,18 @@
-<<<<<<< HEAD
 function [fileName wavID] = getWavName(dateIn, folder,typeHL)
-=======
-function [fileName wi] = getWavName(dateIn, folderIn)
->>>>>>> upstream/mac-first-branch
 %This load your wave file by specifying the folder, date and time
 %fileName = getWavName(datetime(2021,07,15,14,37,00),mypath)
 %
 %dateIn
 
-%Loading folderIn and files informations
-dirInfo = dir(folderIn);
+%Loading folder and files informations
+dirInfo = dir(folder);
 dirInfo([dirInfo.isdir]) = [];
 fileList = {dirInfo.name};
 
 % keep only the wav file
 i2erase = [];
 for i=1:numel(fileList)
-    %     splitName = split(fileList{i}, '_');
+    %     splitName = strsplit(fileList{i}, '_');
     %     if strcmp(fileList{i}(end-2:end),'wav') == 0
     %         i2erase = [i2erase i];
     %     elseif ~strcmp(splitName{2} , typeHL) && ~strcmp(splitName{2} ,['2591' typeHL])
@@ -47,14 +43,9 @@ for i=1:nbF
 end
 
 %Find the file
-<<<<<<< HEAD
-if ~exist('dateT')
-    dateT
-    error('Couln''t find any wav file corresponding.')
-=======
+
 if ~exist('dateT')  
     error(['No file found for ' datestr(dateIn) ' in ' folderIn  '.'])
->>>>>>> upstream/mac-first-branch
 end
 
 
@@ -96,17 +87,7 @@ end
 
 if exist('iFile')
     fileName = fileList(iFile)';
-    for i=1:length(iFile)
-        splitName = split(fileList{iFile(i)}, '_');
-        wi(i).arrLoc = splitName{1};
-        wi(i).type = splitName{2};
-        wi(i).dateStr = splitName{3};
-        wi(i).wavID = splitName{4};
-        
-        dateString = splitName{3};    
-        dateN = datenum(dateString,formatIn);
-        wi(i).dateT = datetime(dateN,'ConvertFrom', 'datenum');
-    end
+    wavID = id(iFile);
 else
     error('Error in bringRead.m. Request time is not in the folder.')
 end

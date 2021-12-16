@@ -1,34 +1,34 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
-AntenneCorrigee=1;
-bateau='BLUEALEXANDRA';
+AntenneCorrigee=0;
+bateau='OCEANEXCONNAIGRA';
 switch bateau
-    case 'BLUEALEXANDRA'
-        if AntenneCorrigee
-            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_11_14h_f=[50_1500]_211208_164421';
-            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_11_14h_f=[50_1500]_211208_164443';
-        else
-            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_11_14h_f=[50_1500]_211210_114729_circ';
-            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_11_14h_f=[50_1500]_211210_114716_circ';
-        end
-        ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_CLD_2107_11_14h.mat'];
-        ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_AAV_2107_11_14h.mat'];
-        
+%     case 'BLUEALEXANDRA'
+%         if AntenneCorrigee
+%             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_11_14h_f=[50_1500]_211208_164421';
+%             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_11_14h_f=[50_1500]_211208_164443';
+%         else
+%             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_11_14h_f=[50_1500]_211210_114729_circ';
+%             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_11_14h_f=[50_1500]_211210_114716_circ';
+%         end
+%         ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_CLD_2107_11_14h.mat'];
+%         ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_AAV_2107_11_14h.mat'];
+%         
     case 'OCEANEXCONNAIGRA'
         if AntenneCorrigee
-            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1807_19_21h_f=[50_1500]_211208_162227';
-            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1807_19_21h_f=[50_1500]_211208_162112';
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1807_20_22h_f=[50_1500]_211215_110609';
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1807_20_22h_f=[50_1500]_211215_110619';
         else
             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1807_19_21h_f=[50_1500]_211208_165738_circ';
             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1807_19_21h_f=[50_1500]_211208_165746_circ';
         end
         ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\OCEANEXCONNAIGRA_CLD_1807_19_21h.mat'];
         ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\OCEANEXCONNAIGRA_AAV_1807_19_21h.mat'];
-        
+%         
     case 'NACCQUEBEC2107'
         if AntenneCorrigee
-            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_5_7h_211207_103206';
-            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_5_7h_211207_103137';
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_5_7h_f=[50_1500]_211215_122600';
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_5_7h_f=[50_1500]_211215_122547';
         else
             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_5_7h_211207_124722_circ';
             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_5_7h_211207_124709_circ';

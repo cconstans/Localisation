@@ -9,14 +9,14 @@ openData = false;
 typeHL = 'LF';
 AntenneCorrigee=1;
 saveData=1;
-bateau='TENACITYVENTURE';
-arrID='CLD';
+bateau='NACCQUEBEC2107';
+arrID='AAV';
 
 
 [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
-  Ns = 2^16;              % Total number of sample
+Ns = 2^16;              % Total number of sample
 laps=60;
 Ntime=duree/laps;
 clear ptime

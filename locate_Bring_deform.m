@@ -63,7 +63,7 @@ D = 1;
 % end
 switch arrID
     case 'AAV'
-        hydrofile='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/AAVv3_filtOpt=0_c0=1480.mat';
+        hydrofile='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\AAVv4_c0=1480 3_boats.mat';
     case 'MLB'
 %         hydrofile='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\MLBv4_c0=1480.mat';
         hydrofile='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\MLBv4_c0=1480 4_boats.mat';
@@ -71,7 +71,7 @@ switch arrID
 %         hydrofile='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\PRCv4_c0=1480.mat';
         hydrofile='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\PRCv4_c0=1480 4_boats.mat';
     case 'CLD'
-        hydrofile='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc/CLDv3_filtOpt=0_c0=1480.mat';
+        hydrofile='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\CLDv4_c0=1480 3_boats.mat';
 end
 load(hydrofile,'X','Y','c0');
 
@@ -93,6 +93,7 @@ for iFile =1:length(fileList)
     
     % Reading wav
     [MAT_s,fe, tstart, dura] = readBring([folderIn fileList{iFile}], ptime(iFile),'duration',duraNs,'buffer',buffer,'power2',true);
+
     file_wav = fileList{iFile};     % file name alone
     
     % ------------------ BEAMFORMING -----------------------
