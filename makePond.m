@@ -25,7 +25,7 @@ if ~AntenneCorrigee
     if strcmp(arr.arrOri,'clock')
         xc = R*sin(theta +  arr.offSet * pi /180);
         yc = R*cos(theta +   arr.offSet* pi /180);
-    elseif strcmp(arrOri,'counter')
+    elseif strcmp(arr.arrOri,'counter')
         xc = R*cos(theta +   arr.offSet* pi /180);
         yc = R*sin(theta +   arr.offSet* pi /180);
     end

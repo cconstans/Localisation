@@ -10,11 +10,9 @@
 # You cant add your own localConfig folder if you do not want to push it to origin
 # /localConfig 
 
-<<<<<<< HEAD
 /configDell
 /results
-*.mat
+*.avi
 *.mp4
 *.asv
 =======
->>>>>>> upstream/mac-first-branch

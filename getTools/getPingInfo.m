@@ -1,4 +1,4 @@
-function [time, ploc] = getPingInfo(dataID,machine,varargin)
+function [time, ploc] = getPingInfo(dataID,varargin)
 % [ploc, ptime ]  = getPingLoc('cav')
 % This fonction return the location and time of any set of ping emission
 % For circular ping, the ping number 1 is located the most north

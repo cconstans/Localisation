@@ -7,14 +7,14 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 openData = false;
 % Path information : folderIn = wav folder / folderOut = figure output folder
 typeHL = 'LF';
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 DataSave=1;
-bateau='NACCQUEBEC2107';
-arrID='AAV';
+bateau='CORIOLIS_PERP';
+arrID='CLD';
 
 % Spectro parameter
-fmin = 50;
-fmax = 1500;
+fmin = 20;
+fmax = 400;
 
 [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);

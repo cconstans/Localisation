@@ -5,7 +5,7 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 
-site='CLD';
+site='PRC';
 video=0;
 % method=1; %0: supress angles when 1 hydro is overlagged. 1: suppress only overlags.
 
@@ -72,7 +72,7 @@ switch site
 end
 
 Nboats=length(ship_AIS_file);
-filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Data loc\' site 'v4_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
+filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Localisation\Bring\Data loc\' site 'v5_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
 
 BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTrack.mat'];
 
@@ -123,12 +123,12 @@ time(dist<MinDist | dist>MaxDist)=[];
 angle(dist<MinDist | dist>MaxDist)=[];
 dist(dist<MinDist | dist>MaxDist)=[];
 
-figure, plot(angle)
-hold on, plot(dist); legend('angle (°)','distance (m)')
-xlabel('#mesure')
-line([0 length(angle)],[MinDist MinDist],'Color','k')
-text(length(angle)/2,MinDist+20,'Minimum distance')
-title([site ': données exploitées'])
+% figure, plot(angle)
+% hold on, plot(dist); legend('angle (°)','distance (m)')
+% xlabel('#mesure')
+% line([0 length(angle)],[MinDist MinDist],'Color','k')
+% text(length(angle)/2,MinDist+20,'Minimum distance')
+% title([site ': données exploitées'])
 % if ~isempty(thetaexcluded)
 %     
 %     idxrange= ~(angle<thetaexcluded(2) & angle>thetaexcluded(1));
@@ -136,7 +136,7 @@ title([site ': données exploitées'])
 %     time=time(idxrange);
 R0=mean(dist);
 
-[fileList, wavID] = getWavName(time, folderIn,typeHL);
+[fileList, wavID] = getWavName(time, folderIn);
 duraNs=5;
 % Ns = 2^14;              % Total number of sample
 buffer = 2.5;             % Time in second to add before the ptime

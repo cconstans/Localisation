@@ -1,6 +1,6 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 bateau='OCEANEXCONNAIGRA';
 switch bateau
 %     case 'BLUEALEXANDRA'
@@ -16,11 +16,11 @@ switch bateau
 %         
     case 'OCEANEXCONNAIGRA'
         if AntenneCorrigee
-            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1807_20_22h_f=[50_1500]_211215_110609';
-            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1807_20_22h_f=[50_1500]_211215_110619';
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1807_20_22h_f=[20_400]_211217_151153';
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1807_20_22h_f=[20_400]_211217_151231';
         else
-            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1807_19_21h_f=[50_1500]_211208_165738_circ';
-            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1807_19_21h_f=[50_1500]_211208_165746_circ';
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1807_20_22h_f=[20_400]_211217_151309_circ';
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1807_20_22h_f=[20_400]_211217_151333_circ';
         end
         ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\OCEANEXCONNAIGRA_CLD_1807_19_21h.mat'];
         ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\OCEANEXCONNAIGRA_AAV_1807_19_21h.mat'];
@@ -83,7 +83,7 @@ hold on, plot(vec_temps_ship/(24*3600),distAAV_ais/1e3,'r')
 hold on, plot(ptime,dist2AAV,'r.');
 legend('CLD AIS','CLD Bring','AAV AIS', 'AAV Bring')
 datetick('x')
-ylim([0 100])
+ylim([0 60])
 if AntenneCorrigee
     title([ 'Distance (km) antenne corrigée'])
 else
