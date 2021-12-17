@@ -7,8 +7,8 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 openData = false;
 % Path information : folderIn = wav folder / folderOut = figure output folder
 typeHL = 'LF';
-AntenneCorrigee=1;
-saveData=1;
+AntenneCorrigee=0;
+DataSave=1;
 bateau='NACCQUEBEC2107';
 arrID='AAV';
 
@@ -59,20 +59,16 @@ spgm.win.type = 'kaiser';
 spgm.win.opad = 2;                  % [s] spectrogram zero padding
 spgm.im.fmin = spgm.im.freqlims(1);spgm.im.fmax = spgm.im.freqlims(2);
 
-
+saveData=0;
 mainBring;
-% if openData == true
-%     disp('Opening already run data')
-%     p = getRunData(pingFolder);
-% else
-%     if AntenneCorrigee
-%         locate_Bring_deform;
-%     else
-%         locateBRing; % The main loop calculation are locate in this script
-%     end
-% end
+
 %%
-% load(ship_AIS_file);
+c0=arr.c;
+hydrofile=arr.hydrofile;
+if DataSave
+    save([folderOut '.mat'],'hydrofile','bateau','c0','laps','angleA','angleM','ptime','matEnergie', 'jour','mois','heure','minute','duree','arrID','fmin','fmax','AntenneCorrigee')
+end
+%%
 
 [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
@@ -91,21 +87,9 @@ colormap jet
 hold on
 hm = plot(ptime,angleM,'o','color','k','markersize',3,'markerfacecolor','k');hold on
 hm2 = plot(vec_temps_ship(idx_deb:idx_fin)/(24*3600),angle(idx_deb:idx_fin),'k','LineWidth',2);
-% datetick('x');
 
-% hold on,  plot(ptime,angleM,'rx');
-% ylim([0 360]), 
 if AntenneCorrigee
     title([ bateau ' ' arrID ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz'])
 else
     title([ bateau ' ' arrID, ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz non corrigée ' ])
 end
-%     legend('Energy','AIS','Bring')
-    
-% subplot(122), 
-% figure,plot(vec_temps_ship/(24*3600),dist/1e3)
-% datetick('x'),title([ arrID, ' distance (km)'])
-
-
-
-%     videoName = [ship_AIS_file(1:end-4)  ];

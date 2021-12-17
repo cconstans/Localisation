@@ -18,12 +18,16 @@ end
 [aPos, arr]  = getArrInfo(arrID);
 
 if ~AntenneCorrigee
+    
+    Nc = 20;
+    R = 10;
+    theta = 0: 2*pi/(Nc) : 2*pi-2*pi/(Nc);
     if strcmp(arr.arrOri,'clock')
-        xc = R*sin(theta +  offset * pi /180);
-        yc = R*cos(theta +  offset* pi /180);
+        xc = R*sin(theta +  arr.offSet * pi /180);
+        yc = R*cos(theta +   arr.offSet* pi /180);
     elseif strcmp(arrOri,'counter')
-        xc = R*cos(theta +  offset* pi /180);
-        yc = R*sin(theta +  offset* pi /180);
+        xc = R*cos(theta +   arr.offSet* pi /180);
+        yc = R*sin(theta +   arr.offSet* pi /180);
     end
     arr.xh=xc;
     arr.yh=yc;

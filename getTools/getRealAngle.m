@@ -5,14 +5,14 @@ function [angle, dist] = getRealAngle(arrID , lat, lon)
 
 if ischar(arrID )
     
-arrLoc = getArrLoc(arrID);
+arrLoc = getArrInfo(arrID);
 
-[dist,angle,a21] = m_idist(arrLoc(2),arrLoc(1),lon,lat);
+[dist,angle,~] = m_idist(arrLoc(2),arrLoc(1),lon,lat);
 
 else
     
-arrLoc = arrID    
-[dist,angle,a21] = m_idist(arrLoc(2),arrLoc(1),lon,lat);
+arrLoc = arrID;    
+[dist,angle,~] = m_idist(arrLoc(2),arrLoc(1),lon,lat);
 
 end
 

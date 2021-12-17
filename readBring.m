@@ -60,7 +60,7 @@ if istart > 0 && iend < ainfo.TotalSamples
     %Y = Y(istart:iend,:);
 elseif istart < 0
    % Loading the first file
-   [fileName2 wavID] = getWavName(time - seconds(dura), fileparts(fileName),filepath(end-1:end)); 
+   [fileName2 wavID] = getWavName(time - seconds(dura), fileparts(fileName)); 
    [Y1,Fs1] = audioread([filepath '/' char(fileName2)],[ainfo.TotalSamples + istart ainfo.TotalSamples]);
 
     

@@ -36,6 +36,7 @@ end
 load(hydrofile,'X','Y','c0');
 ai.xh=X;
 ai.yh=Y;
+ai.hydrofile=hydrofile;
 % switch lower(hID)
 %     case 'aav'
 %         ai.loc = [49.0907 -64.5372];
