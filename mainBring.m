@@ -50,7 +50,6 @@ convPW.SH =-194;      % Parameter for power convertion
 convPW.G = 40;
 convPW.D = 1;
 %duree_film = 60;
-c = 1475;           % Sound velocities
 
 
 % Creating a circle vecteur
@@ -84,7 +83,7 @@ for ifile=1:length(fileList)
     %t=time; % Need to be find and rename
     
     % Get ponderation matrice
-    matPondahf = makePond(arrID,azimut360,spgm.im.ns,spgm.fs,'fmin',spgm.im.fmin,'fmax',spgm.im.fmax);
+    matPondahf = makePond(arrID,azimut360,spgm.im.ns,spgm.fs,AntenneCorrigee,'fmin',spgm.im.fmin,'fmax',spgm.im.fmax);
     
     % Make the beamforming for all direction
 %   [Pbf, timebf, freqbf, wavBF] = beamForming(arrID, wav.db , azimut360, spgm,'specmethod','spectro');

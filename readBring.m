@@ -76,8 +76,8 @@ else  % Need to open next audio file
     % Loading the first file
     [Y1,Fs1] = audioread(fileName,[istart ainfo.TotalSamples]);
     
-    [fileList wavID] = getWavName(time + seconds(dura), fileparts(fileName),filepath(end-1:end));
-    [Y2,Fs2] = audioread(fileName,[1 overSample]);
+    [fileList wavID] = getWavName(time + seconds(dura), fileparts(fileName));
+    [Y2,Fs2] = audioread([filepath '/' char(fileList)],[1 overSample]);
     
     Y = [Y1; Y2];
     

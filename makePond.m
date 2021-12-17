@@ -1,4 +1,4 @@
-function [matPondahf] = makeMatPond(arrID,azimut,Ns,Fs,varargin)
+function [matPondahf] = makePond(arrID,azimut,Ns,Fs,AntenneCorrigee,varargin)
 %%
 while ~isempty(varargin)
         switch lower(varargin{1})
@@ -15,8 +15,19 @@ end
 %%
 
 % Get array info
-[aPos arr]  = getArrInfo(arrID);
+[aPos, arr]  = getArrInfo(arrID);
 
+if ~AntenneCorrigee
+    if strcmp(arr.arrOri,'clock')
+        xc = R*sin(theta +  offset * pi /180);
+        yc = R*cos(theta +  offset* pi /180);
+    elseif strcmp(arrOri,'counter')
+        xc = R*cos(theta +  offset* pi /180);
+        yc = R*sin(theta +  offset* pi /180);
+    end
+    arr.xh=xc;
+    arr.yh=yc;
+end
 % Get array needed
 azimutR= pi* azimut/180;  % Vector azimut
 freq = (0:1:Ns-1)*Fs/Ns;  % Vector frequence 

@@ -12,6 +12,9 @@ saveData=1;
 bateau='NACCQUEBEC2107';
 arrID='AAV';
 
+% Spectro parameter
+fmin = 50;
+fmax = 1500;
 
 [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
@@ -32,28 +35,42 @@ printFig = false;    % Saving figure to a folder
 nbPk = 4 ;          % Nomber of side lobe to keep
 
 % Reading parameters
-buffer = 0.4;             % Time in second to add before the ptime
+imDur = 2;%2^15 %+ (0.4 * 10000);              % Total number of sample
+buffer = 0.5;             % Time in second to add before the ptime
 
-% Spectro parameter
-% Frequence min and max
-fmin_int = 50;
-fmax_int = 1500;
-
-folderOut=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\' arrID '_' num2str(jour) '0' num2str(mois) '_' num2str(heure) '_' num2str(round(heure+duree/3600)) 'h_f=[' num2str(fmin_int) '_' num2str(fmax_int) ']_' datestr(now,'yymmdd_HHMMSS')];
+folderOut=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\' arrID '_' num2str(jour) '0' num2str(mois) '_' num2str(heure) '_' num2str(round(heure+duree/3600)) 'h_f=[' num2str(fmin) '_' num2str(fmax) ']_' datestr(now,'yymmdd_HHMMSS')];
 if ~AntenneCorrigee
     folderOut=[folderOut,'_circ'];
 end
 
-if openData == true
-    disp('Opening already run data')
-    p = getRunData(pingFolder);
-else
-    if AntenneCorrigee
-        locate_Bring_deform;
-    else
-        locateBRing; % The main loop calculation are locate in this script
-    end
-end
+%% Spectrogram parameter
+% spectrogram image parameters
+spgm.im.freqlims = [fmin fmax];       % [Hz] frequency scale boundary limits
+spgm.im.clims = [30 80];           % [dB] C limite pcolor
+spgm.im.dur = imDur;%'all';         % [s or 'all'] figure duration
+%spgm.im.ovlp = 50;                 % [%] image window overlap
+spgm.im.figvision = true ;          % [true false] visiblity of figure before saveas jpf file
+%spgm.im.movm = 100;                % Movmean parameter for the first panel
+%spgm.im.FontS = 14;                % Image font Size
+% spectrogram window parameters
+spgm.win.dur = 2048/10000;          % [s] spectrogram window length duration
+spgm.win.ovlp = 90;                 % [%] spectrogram window overlap
+spgm.win.type = 'kaiser';
+spgm.win.opad = 2;                  % [s] spectrogram zero padding
+spgm.im.fmin = spgm.im.freqlims(1);spgm.im.fmax = spgm.im.freqlims(2);
+
+
+mainBring;
+% if openData == true
+%     disp('Opening already run data')
+%     p = getRunData(pingFolder);
+% else
+%     if AntenneCorrigee
+%         locate_Bring_deform;
+%     else
+%         locateBRing; % The main loop calculation are locate in this script
+%     end
+% end
 %%
 % load(ship_AIS_file);
 
@@ -79,9 +96,9 @@ hm2 = plot(vec_temps_ship(idx_deb:idx_fin)/(24*3600),angle(idx_deb:idx_fin),'k',
 % hold on,  plot(ptime,angleM,'rx');
 % ylim([0 360]), 
 if AntenneCorrigee
-    title([ bateau ' ' arrID ' f=[' num2str(fmin_int) '-' num2str(fmax_int) '] Hz'])
+    title([ bateau ' ' arrID ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz'])
 else
-    title([ bateau ' ' arrID, ' f=[' num2str(fmin_int) '-' num2str(fmax_int) '] Hz non corrigée ' ])
+    title([ bateau ' ' arrID, ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz non corrigée ' ])
 end
 %     legend('Energy','AIS','Bring')
     

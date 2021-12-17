@@ -60,7 +60,7 @@ for i=1:length(dateIn)
         diffT = dateT(ft) - dateIn(i) ;
         if diffT == seconds(0)
             iFile(i) = ft;
-        elseif diffT < minutes(5) && diffT > 0 && ft > 1
+        elseif diffT <= minutes(5.01) && diffT > 0 && ft > 1
             iFile(i) = ft - 1 ;
         else
             error('Couldnt load the file at l.61 or add more conditions.')
