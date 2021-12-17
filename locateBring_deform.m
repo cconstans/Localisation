@@ -7,6 +7,7 @@
 % The figure to plot can be specify by the argument showFig = [1 3 4..]
 % Figure code and description are located in showFigBring.m
 %
+% last update 7/10/2021 by @kevDuquette
 
 
 % -------------- Fixed variables --------------------
@@ -17,7 +18,7 @@ wavInfo = audioinfo([folderIn fileList{1}]);
 nbF = length(fileList);
 
 % Array information
-% [arrLoc, offset, arrOri] = getArrLoc(arrID);
+[arrLoc, offset, arrOri] = getArrLoc(arrID);
 
 % Spectro parameters
 % Spectro windows
@@ -53,26 +54,32 @@ theta = 0: 2*pi/(Nc) : 2*pi-2*pi/(Nc);
 % Set hydropohone location and oriemntation
 switch arrID
     case 'AAV'
-        load('../../Data loc/AAV_filtOpt=0_211104_131035.mat','X','Y');
+        load('Data loc/AAV_filtOpt=0_211104_131035.mat','X','Y');
     case 'MLB'
-        load('../../Data loc/MLB_filtOpt=0_211104_131415.mat','X','Y');
+        load('Data loc/MLB_filtOpt=0_211104_131415.mat','X','Y');
     case 'PRC'
-        load('../../Data loc/PRC_filtOpt=0_211104_131656.mat','X','Y');
+        load('Data loc/PRC_filtOpt=0_211104_131656.mat','X','Y');
     case 'CLD'
-        load('../../Data loc/CLD_filtOpt=0_211109_101636.mat','X','Y');
+        load('Data loc/CLD_filtOpt=0_211109_101636.mat','X','Y');
 end
 xc=X;
 yc=Y;
-
+% Creating the output folder
+% if ~isfolder(folderOut); 
+% disp(['Creating output folder: ' folderOut]);
+% mkdir(folderOut); 
+% mkdir(folderOut); end
 %% File loop
 
 % _Pre-Initialisation
 matEnergie = nan(nbF,360);
 angleA = nan(nbF,nbPk);
-%%
+
 for iFile =1:length(fileList)
     disp(['Executing beamforming for file ' num2str(iFile) '/' num2str(length(fileList))])
-
+%     close all
+    
+    
     % Reading wav
     [MAT_s,fe, tstart, dura] = readBring([folderIn fileList{iFile}], ptime(iFile),'duration',duraNs,'buffer',buffer,'power2',true);
     file_wav = fileList{iFile};     % file name alone

@@ -5,8 +5,7 @@
 % or by a get function [ploc, ptime ]  = getPingLoc('aav');
 %
 % The figure to plot can be specify by the argument showFig = [1 3 4..]
-% Figure code and description are located in showFigBring.m and
-% showGlobalFig.m
+% Figure code and description are located in showFigBring.m
 %
 % last update 7/10/2021 by @kevDuquette
 
@@ -14,7 +13,10 @@
 % -------------- Fixed variables --------------------
 
 % Loading file information
-[fileList, wavID] = getWavName(ptime, folderIn,typeHL);
+% BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation_reseau\boatTrack\' arrID 'CircleTrack.mat'];
+% load(BoatInfo);
+
+[fileList wavID] = getWavName(ptime, folderIn,typeHL);
 wavInfo = audioinfo([folderIn fileList{1}]);
 nbF = length(fileList);
 
@@ -63,8 +65,10 @@ end
 
 
 % Creating the output folder
-disp(['Creating output folder: ' folderOut]); mkdir(folderOut); 
-
+% if ~isfolder(folderOut); 
+disp(['Creating output folder: ' folderOut]);
+mkdir(folderOut); 
+% mkdir(folderOut); end
 %% File loop
 
 % _Pre-Initialisation
@@ -73,7 +77,7 @@ angleA = nan(nbF,nbPk);
 %%
 for iFile =1:length(fileList)
     disp(['Executing beamforming for file ' num2str(iFile) '/' num2str(length(fileList))])
-    close all
+%     close all
     
     
     % Reading wav
@@ -128,7 +132,7 @@ for iFile =1:length(fileList)
     
     
     % Goniométrie -------------------> Figure 2,3
-    Energie = nan(1,length(vec_azimut));
+    Energie = [];
     df = vec_f(2) -vec_f(1);
     for u = 1 : length(vec_azimut)
         MAT_POND_vs_h_freq =squeeze(MAT_POND_vs_azim_h_freq(u,:,:));
@@ -147,7 +151,11 @@ for iFile =1:length(fileList)
     
     % Find peak of energy
     [pk pkloc] = findpeaks(Energie_NORM,'SortStr','descend','NPeaks', 4 );%'MinPeakHeight',0.3);
-    
+    if Energie_NORM(1)>Energie_NORM(pkloc(1)) && Energie_NORM(1)>Energie_NORM(end)
+        pkloc=[1 pkloc(1:3)];
+    elseif Energie_NORM(end)>Energie_NORM(pkloc(1)) && Energie_NORM(end)>Energie_NORM(1)
+        pkloc=[0 pkloc(1:3)];
+    end
     % Find the direction of source
     angleA(iFile, : )  = pkloc;  % Angle of arrival with side lobe
     angleM(1,iFile)  = pkloc(1);  % Max angle of arrival
@@ -161,8 +169,6 @@ for iFile =1:length(fileList)
     
 end % end loop on file
 
-
-
 % Show global figure
 showGlobalFig;
 
@@ -170,7 +176,7 @@ showGlobalFig;
 % Saving data
 if saveData == true
     if exist('angleR')
-        save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','angleR','ptime','matEnergie')
+        save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','angleR','ptime','ploc','matEnergie')
     else
         save([folderOut 'dataAngleOfArrival_' outName '.mat'],'angleA','angleM','ptime','matEnergie')
     end

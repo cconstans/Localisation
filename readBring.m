@@ -50,7 +50,7 @@ ftime = getFileTime(name);
 % Start and end time
 start = time - ftime;
 tstart = ftime + start;
-istart = floor((seconds(start) - buffer) * Fs) ;
+istart = max(1,floor((seconds(start) - buffer) * Fs)) ;
 iend = istart + Ns -1;
 
 

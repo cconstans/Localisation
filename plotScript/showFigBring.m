@@ -12,7 +12,8 @@
 
 % Figure 1 : spectogram
 if any( showFig == 1 )
-    figure(1)
+%     figure(1)
+figure
     pcolor(vec_temps, vec_freq, MAT_t_f_STFT_dB'); shading flat; caxis([30 90]); colorbar
     ylim([20 300])
     xlabel(' t (s)')
@@ -33,15 +34,13 @@ end
 if any( showFig == 2 )
     % azimut_NARW = atan2(y_NARW-y0,x_NARW-x0);
     % azimut_SHIP = atan2(y_SHIP-y0,x_SHIP-x0);
-    
-    figure(2)
+%     figure,
     plot(vec_azimut*180/pi, Energie_dB,'k','LineWidth',2);
     hold on
     xlabel(' azimut (°)','interpret','tex')
     ylabel(' SPL dB re. 1µPa','interpreter','tex')
     grid on
     set(gca,'FontSize',16)
-    
     if printFig ==true
         print([folderOut 'energyFctAzimutXY_' outName '_p' num2str(iFile)  '.png'], '-r150','-dpng', '-f2')
     end
@@ -50,7 +49,13 @@ end
 % -----------------------------------------------------------------
 % Figure 3 : Energy fct azimut circle
 if any( showFig == 3 )
-    figure(3)
+%     figure(3)
+%%
+% figure
+% close(figure(4))
+    figure(4)
+    subplot(ceil(length(fileList)/ceil(sqrt(length(fileList)))),ceil(sqrt(length(fileList))),iFile)
+
     R_source = 5000;
     vec_azim = linspace(0,2*pi,1000);
     if strcmp(arrOri , 'clock')
@@ -99,8 +104,8 @@ if any( showFig == 3 )
     if printFig ==true
         print([folderOut 'energyFctAzimutCircle_' outName '_p' num2str(iFile)  '.png'], '-r150','-dpng', '-f3')
     end
-        title([arrID ' ' datestr(ptime(iFile),'HH:MM:SS')])
-
+    title([arrID ' ' datestr(ptime(iFile),'HH:MM:SS')])
+    %%
 end % end showfig3
 
 % ---------------------------------------------------------------------
@@ -124,7 +129,8 @@ if any ( showFig == 4 )
     s_FV = ifft(FFT_S_FV);
 
     
-    figure(4)
+%     figure(4)
+figure
     t0=1;
     t =t0-Ns/2*1/fe+(0:Ns-1)*1/fe;
     subplot(5,1,1);plot(t,s_FV,'k')
@@ -210,7 +216,8 @@ if any ( showFig == 5)
     end
     
     % ------ Figure plot ---------
-    figure(5)
+%     figure(5)
+figure
     for u = 1 : 1: Nvoie
         %      u
         %      Nvoie

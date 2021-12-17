@@ -91,7 +91,7 @@ switch machine
         end
 end
 %pingFolder = ['/Users/Administrator/Documents/MPO/BRing/Data/results/' arrID '/prcCircle_Ns14_f150-200hz/'];
-%folderIn = ['Z:\DATA\missions\2021-07-27_IML_2021-016_BRings\wav\' arrID '\'];
+%folderIn = ['Z:\DATA\missions\2021-07-27_IML_2021-016_BRings\wav\' arrID '/'];
 
 % Loading files and time
 % Time must be in datetime format. The file to load will be automatically find
@@ -129,9 +129,71 @@ else
     end
     showAOACircle;
     
+
+end
+showAOACircle;
+
+%%
+% err=mean(abs(angleM-angle)/360);
+% err=mean(min(abs(angleM-angleR'),abs(abs(angleM-angleR')-360))/360);
+% figure
+% h1=plot(angleM,'or');
+% hold on
+% % hTh = plot(x,0:36:360-36,'k-');
+% h2 = plot(angleR,'xb');
+% legend([h1,h2],{'Angle calculé','Angle théorique'})
+% if AntenneCorrigee
+%     
+%     title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+% else
+%     title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
+% end
+%%
+
+err=mean(min(abs(angleM-angle),abs(abs(angleM-angle)-360))/360);
+figure
+h1=plot(angleM,'or');
+hold on
+% hTh = plot(x,0:36:360-36,'k-');
+h2 = plot(angle,'xb');
+legend([h1,h2],{'Angle calculé','Angle théorique'})
+if AntenneCorrigee
+    
+    title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+else
+    title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
 end
 
 
+figure, 
+plot(angle,angle,'k')
+hold on, plot(angle,angleM,'rx')
+xlabel('Angle théorique (°)')
+ylabel('Angle calculé (°)')
+if AntenneCorrigee
+    title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+else
+    title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
+end
+
+
+figure, 
+plot(angleM-angle,'kx')
+hold on,
+plot([1 length(angle)],[0 0])
+ylabel('Angle calculé - angle théorique (°)')
+ylim([-20 20 ])
+
+% if AntenneCorrigee
+%     title([arrID ' forme corrigée err=' num2str(err*100,3) '%'] )
+% else
+%     title([arrID ' forme circulaire err=' num2str(err*100,3) '%'] )
+% end
+% showAOACircle
+% Plot some side lobe
+% for ii=2:2
+%    hSl = plot(x,angleA(:,ii),'o') 
+% end
 %% Add some more specified line or figures related to you run
 if strcmp(DataToBeamform,'all')
     
