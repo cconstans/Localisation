@@ -1,4 +1,4 @@
-function [reconFFT, timeV, freqV, recon, matFFT] = beamForming(arrIDorMATPOND, matWav,azimut, spgm ,varargin)
+function [reconFFT, timeV, freqV, recon, matFFT] = beamForming(arrIDorMATPOND, matWav,azimut, spgm ,AntenneCorrigee,varargin)
 %[recon, timeV, freqVFr ] = reconstruct(nbV,matPondahf, matFFT, azimut, freq, spec)
 % This fonction reconstruct signal il all different direction using all
 % chanel. So all signal reconstruct point in one direction of listening.
@@ -47,7 +47,7 @@ nbV = length(azimut);
 % Matrice of ponderation
 if ~exist('matPondahf') || size(matPondahf,2) ~= spgm.im.ns
     % Get the ponderation matric
-    matPondahf = makePond(arrID,azimut,spgm.im.ns,spgm.fs,'fmin',spgm.im.fmin,'fmax',spgm.im.fmax);
+    matPondahf = makePond(arrID,azimut,spgm.im.ns,spgm.fs,AntenneCorrigee,'fmin',spgm.im.fmin,'fmax',spgm.im.fmax);
     %matPondahf = makePond(arrID,1:360,Ns,spec.Fs,'fmin',spec.fmin,'fmax',spec.fmax);
 end
 %% Create the fft of the signal
