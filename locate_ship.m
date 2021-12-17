@@ -9,7 +9,7 @@ openData = false;
 typeHL = 'LF';
 AntenneCorrigee=1;
 DataSave=1;
-bateau='CORIOLIS_PERP';
+bateau='OCEANEXCONNAIGRA';
 arrID='CLD';
 
 % Spectro parameter
@@ -30,7 +30,7 @@ ptime(it)=datetime(ptime(it-1)+seconds(laps));
 end
 
 % Figure parameters
-showFig = [ ]       % Figure number to print
+showFig = [1 2 3 4 5 6 7 ]       % Figure number to print
 printFig = false;    % Saving figure to a folder
 nbPk = 4 ;          % Nomber of side lobe to keep
 
