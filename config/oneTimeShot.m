@@ -13,12 +13,33 @@ ptime= datetime(2021,08,04,00,52,51);
 %[ptime, ploc]  = getPingInfo(arrID); % Load ping information
 %ptime = ptime + seconds(7);          % Add an offset to be center the 5 upcalls
 %ptime = ptime(1);
+machine=getMachine(cd);
+typeHL = 'LF';
 
 %folderIn = ['F:\Bring_Dep_1\' arrID '\']; % Local Mac folder
-folderIn = ['~/Documents/MPO/BRing/Data/wav/' arrID '/']; % Local Mac folder
+
+switch machine
+    case 'dellKev'
+        folderIn = ['~/Documents/MPO/BRing/Data/wav/' arrID '/']; % Local Mac folder
+    case 'cha'        
+        switch arrID
+            case {'AAV','CLD'}
+                folderIn = ['D:/Bring_Dep_1_Wav/' arrID '/' typeHL '/']; % Local Mac folder
+            case {'MLB','PRC'}
+                folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
+        end
+end
+
+
 [~, wavi] = getWavName(ptime, folderIn);
 outName = ['noDB' arrID '_' wavi.wavID '_' datestr(ptime,'yyyymmddTHHMMSS')];%'MLB_1493_20210804T005254';
-folderOut = ['/Users/Administrator/Documents/MPO/BRing/Data/results/' arrID '/' outName '/' ];
+
+switch machine
+    case 'dellKev'
+        folderOut = ['/Users/Administrator/Documents/MPO/BRing/Data/results/' arrID '/' outName '/' ];
+    case 'cha'
+        folderOut = ['C:/Users/CHARLOTTE/Documents/MATLAB/Bring/Localisation/results/' arrID '/' outName '/'];
+end
 %folderOut = ['Z:\DATA\missions\2021-07-27_IML_2021-016_BRings\results\' arrID '\' outName '\'];
 %folderOut = ['C:\Users\duquettek\Documents\BRing\results\' arrID '\' outName '\'];
 %pingFolder = ['/Users/Administrator/Documents/MPO/BRing/Data/results/' arrID '/prcCircle_Ns14_f150-200hz/'];
@@ -41,7 +62,7 @@ arrLoc = getArrInfo(arrID);
 %angleR = getRealAngle(arrID, ploc(:,1),ploc(:,2));
 
 % Creating the output folder
-if ~isfolder(folderOut); disp(['Creating output folder: ' folderOut]); mkdir(folderOut); end
+if isempty(dir(folderOut)); disp(['Creating output folder: ' folderOut]); mkdir(folderOut); end
 %% Spectrogram parameter
 % spectrogram image parameters
 spgm.im.freqlims = [100 200];       % [Hz] frequency scale boundary limits
@@ -75,7 +96,7 @@ else
     % Add some figure script located in ../plotScript
     % Show global figure
     %showGlobalFig;
-    %showAOACircle; 
+    %showAOACircle;
     
 end
 

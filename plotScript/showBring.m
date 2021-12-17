@@ -206,7 +206,7 @@ if any ( showFig == 5)
         set(gca,'layer','top','gridAlpha',0.5,'XMinorGrid','on','YMinorGrid','on','MinorGridAlpha',0.3,'XMinorTick','on','YMinorTick','on')
     end
     
-    sgtitle(fileList{ifile},'interpreter','none')
+%     sgtitle(fileList{ifile},'interpreter','none')
     
     % Color bar
     cbPos = [sp.pos{end}(1)+sp.pos{end}(3)+0.01 sp.pos{end}(2) 0.01 (sp.height - sp.bedge - sp.tedge)/sp.height];%sp.pos{end}(4)*(sp.nby-1)+sp.pos{1}(4)+sp.spacey ];
@@ -276,7 +276,7 @@ if any ( showFig == 6)
         set(gca,'layer','top','gridAlpha',0.5,'XMinorGrid','on','YMinorGrid','on','MinorGridAlpha',0.3,'XMinorTick','on','YMinorTick','on')
     end
     
-    sgtitle(fileList{ifile},'interpreter','none')
+%     sgtitle(fileList{ifile},'interpreter','none')
     
     % Color bar
     cbPos = [sp.pos{end}(1)+sp.pos{end}(3)+0.01 sp.pos{end}(2) 0.01 (sp.height - sp.bedge - sp.tedge)/sp.height];%sp.pos{end}(4)*(sp.nby-1)+sp.pos{1}(4)+sp.spacey ];

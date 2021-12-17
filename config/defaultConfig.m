@@ -71,7 +71,7 @@ switch machine
                 Ns = 2^14;              % Total number of sample
         end
         
-        BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation_reseau_cha\boatTrack\' arrID 'CircleTrack.mat'];
+        BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' arrID 'CircleTrack.mat'];
         load(BoatInfo);
         
         if strcmp(DataToBeamform,'all')
