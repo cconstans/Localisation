@@ -10,7 +10,7 @@ typeHL = 'LF';
 AntenneCorrigee=0;
 DataSave=1;
 bateau='CORIOLIS_PERPP';
-arrID='PRC';
+arrID='MLB';
 
 % Spectro parameter
 fmin = 20;
