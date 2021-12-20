@@ -15,7 +15,7 @@ end
 %%
 
 % Get array info
-[aPos, arr]  = getArrInfo(arrID);
+[aPos, arr]  = getArrInfo(arrID,AntenneCorrigee);
 
 if ~AntenneCorrigee
     

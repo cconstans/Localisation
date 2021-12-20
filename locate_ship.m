@@ -7,10 +7,10 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 openData = false;
 % Path information : folderIn = wav folder / folderOut = figure output folder
 typeHL = 'LF';
-AntenneCorrigee=1;
+AntenneCorrigee=0;
 DataSave=1;
-bateau='OCEANEXCONNAIGRA';
-arrID='CLD';
+bateau='CORIOLIS_PERPP';
+arrID='PRC';
 
 % Spectro parameter
 fmin = 20;
@@ -20,7 +20,7 @@ fmax = 400;
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
 Ns = 2^16;              % Total number of sample
-laps=60;
+laps=120;
 Ntime=duree/laps;
 clear ptime
 ptime(1)=datetime(2021,mois,jour,heure,minute,0);
@@ -30,7 +30,8 @@ ptime(it)=datetime(ptime(it-1)+seconds(laps));
 end
 
 % Figure parameters
-showFig = [1 2 3 4 5 6 7 ]       % Figure number to print
+% showFig = [1 2 3 4 5 6 7 ]       % Figure number to print
+showFig = [ ]       % Figure number to print
 printFig = false;    % Saving figure to a folder
 nbPk = 4 ;          % Nomber of side lobe to keep
 
@@ -59,6 +60,7 @@ spgm.win.type = 'kaiser';
 spgm.win.opad = 2;                  % [s] spectrogram zero padding
 spgm.im.fmin = spgm.im.freqlims(1);spgm.im.fmax = spgm.im.freqlims(2);
 
+%% BEAMFORMING
 saveData=0;
 mainBring;
 

@@ -20,7 +20,7 @@ wavInfo = audioinfo([folderIn fileList{1}]);
 nbF = length(fileList);
 
 % Array information
-[arrLoc, arr] = getArrInfo(arrID);
+[arrLoc, arr] = getArrInfo(arrID,AntenneCorrigee);
 
 % Spectro parameters
 % Modification of variables into a structure spec. If you get error related

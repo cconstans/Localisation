@@ -69,9 +69,13 @@ switch bateau
                 minute=25;
                 duree=60*15;
         end
-    case 'CORIOLIS_PERP'
+    case 'CORIOLIS_PERPH'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\CORIOLISII_' arrID '_1307_23_30h.mat'];
         load(ship_AIS_file);
+    case 'CORIOLIS_PERPP'
+        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\CORIOLISII_' arrID '_3007_13_18h.mat'];
+        load(ship_AIS_file);
+        duree=3600*4;
     case 'TENACITYVENTURE'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\TENACITYVENTURE_' arrID '_1507_20_22h.mat'];
         load(ship_AIS_file);
