@@ -20,7 +20,7 @@ fmax = 400;
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
 Ns = 2^16;              % Total number of sample
-laps=120;
+laps=240;
 Ntime=duree/laps;
 clear ptime
 ptime(1)=datetime(2021,mois,jour,heure,minute,0);
@@ -68,7 +68,7 @@ mainBring;
 c0=arr.c;
 hydrofile=arr.hydrofile;
 if DataSave
-    save([folderOut '.mat'],'hydrofile','bateau','c0','laps','angleA','angleM','ptime','matEnergie', 'jour','mois','heure','minute','duree','arrID','fmin','fmax','AntenneCorrigee')
+    save([folderOut '.mat'],'folderOut','hydrofile','bateau','c0','laps','angleA','angleM','ptime','matEnergie', 'jour','mois','heure','minute','duree','arrID','fmin','fmax','AntenneCorrigee')
 end
 %%
 

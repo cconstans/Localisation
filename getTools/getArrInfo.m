@@ -1,4 +1,4 @@
-function [loc ai]= getArrInfo(hID,AntenneCorrigee)
+function [loc, ai ]= getArrInfo(hID,AntenneCorrigee)
 % Get the most accurate array location for the moment
 % [loc arr]= getArrInfo(hID)
 % Where loc is the geopositon of the arr and arr is a structure containing

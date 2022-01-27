@@ -12,6 +12,10 @@
 if ~exist('aziCible') || strcmp(aziCible,'max')
     aziCible = angleM;
 end
+
+% nbAzimut = 360;      % Number of azimut for calcul
+% azimut360 = linspace(0,360-360/nbAzimut,nbAzimut);
+
 [ ~, indAziCible] = min(abs(azimut360 - aziCible));
 aziCible2 =  aziCible();
 arrDiameter = 10;
@@ -48,7 +52,8 @@ end
 % Figure 2 : Energy fct azimut
 % -------------------------------------------------------------------
 if any( showFig == 2 )
-    
+    Energie_dB = 10*log10(Energie);
+
     figure(2)
     plot(azimut360, Energie_dB,'k','LineWidth',2);
     hold on
@@ -68,23 +73,29 @@ end
 % Figure 3 : Energy fct azimut circle
 % -----------------------------------------------------------------
 if any( showFig == 3 )
-    
+    [arrLoc, arr] = getArrInfo(arrID,AntenneCorrigee);
+    Energie_NORM = Energie/max(Energie);
+
     aziCircle = linspace(0,2*pi,1000);
     
     figure(3)
     plot(mean(arr.xh),mean(arr.yh),'k+')
     hold on
-    plot(arr.xh,arr.yh,'r.','MarkerSize',12)
-    plot(arrDiameter*sin(aziCircle),arrDiameter*cos(aziCircle),'k')
+    plot(arr.xh,arr.yh,'r.','MarkerSize',14)
+    plot([arr.xh arr.xh(1)],[arr.yh arr.yh(1)],'Color',[0.5 0.5 0.5])
+
+%     plot(arrDiameter*sin(aziCircle),arrDiameter*cos(aziCircle),'k')
     for u = 1 : length(arr.xh)
         text(arr.xh(u)+0.3,arr.yh(u),['h' num2str(u)])
     end
-    
+        title(['Azimut ' num2str(azimut360(indAziCible)) '°'])
+
     xlabel(' x (m)')
     ylabel(' y (m)')
     grid on
     axis equal
-    
+    xlim([min([-10,arr.xh])-2 max([10,arr.xh])+2])
+    ylim([min([-10,arr.yh])-2 max([10,arr.yh])+2])
     xxx = sin(azimut360* pi /180).*Energie_NORM*arrDiameter;
     yyy = cos(azimut360* pi /180).*Energie_NORM*arrDiameter;
     plot(xxx,yyy,'k','LineWidth',2)
@@ -94,8 +105,8 @@ if any( showFig == 3 )
     text(9.2,9.5,'N')
     
     
-    if printFig ==true
-        print([folderOut 'energyFctAzimutCircle_' outName '_p' num2str(ifile)  '.png'], '-r150','-dpng', '-f3')
+    if DataSave
+        saveas(gcf,[folderOut '_gonio.fig'])
     end
     
 end % end showfig3
@@ -106,7 +117,7 @@ end % end showfig3
 % ---------------------------------------------------------------------
 % Figure 4: spectrogramme 1 voie
 % ---------------------------------------------------------------------
-if any ( showFig == 4 )
+
     clear ax
     %[vec_temps, vec_freq, MAT_t_f_STFT_complexe, MAT_t_f_STFT_dB] = COMP_STFT_snapshot(MAT_s_vs_t_h(:,1),0, fe, spec.winSz, spec.rec, spec.wpond, spec.zp);
     %[vec_temps_FV, vec_freq_FV, MAT_t_f_STFT_complexe, MAT_t_f_STFT_dB_FV] = COMP_STFT_snapshot(s_FV,t0-Ns/2*1/fe, fe, spec.winSz, spec.rec, spec.wpond, spec.zp);
@@ -114,11 +125,15 @@ if any ( showFig == 4 )
     % Get spectro of cible
     [PdbC, timeC, freqC,reconC] = beamForming(arrID, wav.db , angleM , spgm,AntenneCorrigee,'specmethod','spectro');
     PdbC = squeeze(PdbC);
-    
-    disp('Wong time in figure4')
+     [~,idt]=max(sum(PdbC,2));
+    Tmax=timeC(idt);
+%     disp('Wong time in figure4')
     %tRecon =1-spgm.fs/2*1/spgm.fs+(0:spgm.ns-1)*1/spgm.fs;
+        if any ( showFig == 4 )
+
     t1=floor(spgm.ns/4);
     tRecon =[time_s(t1:end) time_s(1:t1-1) ];
+        
     figure(4)
     ax(1) = subplot(5,1,1);
     plot(tRecon,reconC,'k')
@@ -131,6 +146,7 @@ if any ( showFig == 4 )
     ylabel(' Frequency (Hz)')
     caxis(spgm.im.clims)
     
+   
     %caxis([Lmin Lmax])
     colormap jet
     
