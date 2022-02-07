@@ -1,29 +1,36 @@
 clear 
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 % baleine='0408_9h_1';
-baleine='blue_1507_9h';
-
+% baleine='blue_1507_9h';
+baleine='0408_12h_1';
 switch baleine
     case '0408_9h_1'
+        site='MLB_PRC';
         if AntenneCorrigee
-            site='MLB_PRC';
             data1='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\MLB_0408_9h_1_220126_153616';
             data2='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\PRC_0408_9h_1_220126_152701';
+        else
+            
+        end
+    case '0408_12h_1'
+        site='MLB_PRC';
+        
+        if AntenneCorrigee
+            data1='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\MLB_0408_12h_1_220127_093310';
+            data2='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\PRC_0408_12h_1_220127_094322';
             
         else
-           
+            data1='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\MLB_0408_12h_1_220127_093505_circ';
+            data2='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\PRC_0408_12h_1_220127_094316_circ';
         end
-        case 'blue_1507_9h'
+    case 'blue_1507_9h'
+        site='AAV_CLD';
         if AntenneCorrigee
-            site='AAV_CLD';
             data1='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\blue_AAV_1507_9h_220126_125147';
             data2='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\blue_CLD_1507_9h_220126_124810';
-            
         else
-            site='AAV_CLD';
             data1='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\blue_AAV_1507_9h_220126_165919_circ';
             data2='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\blue_CLD_1507_9h_220126_124731_circ';
-            
         end
         
 end
@@ -86,16 +93,16 @@ text(x2,y2,'CLD')
 plot(x_whale,y_whale,'bx');
 daspect([1 1 1])
 
-switch site
-    case 'MLB_PRC'
-        openfig('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\m_map\mmap_ex\fond_MLB_PRC.fig');
-    case 'AAV_CLD'
-        openfig('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\m_map\mmap_ex\fond_AAV_CLD.fig');
-end
-
-hold on, 
-hr=   m_plot(lon,lat,'o','MarkerEdgeColor','k',...
-    'MarkerFaceColor','k','MarkerSize',4) ;
+% switch site
+%     case 'MLB_PRC'
+%         openfig('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\m_map\mmap_ex\fond_MLB_PRC.fig');
+%     case 'AAV_CLD'
+%         openfig('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\m_map\mmap_ex\fond_AAV_CLD.fig');
+% end
+% 
+% hold on, 
+% hr=   m_plot(lon,lat,'o','MarkerEdgeColor','k',...
+%     'MarkerFaceColor','k','MarkerSize',4) ;
 
 % image_map_point(x_whale,y_whale, loc1,loc2);
 saveas(gcf,[data1 '.fig'])

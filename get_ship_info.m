@@ -2,6 +2,24 @@ function [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mm
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID)
 
 switch bateau
+    case 'LAKEONTARIO'
+        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\LAKEONTARIO_' arrID '_1507_9_11h'];
+        load(ship_AIS_file);
+    case 'MIEDWIE'
+        switch arrID
+            case 'CLD'
+                ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MIEDWIE_CLD_1607_6_8h'];
+            case 'AAV'
+                ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MIEDWIE_AAV_1607_7_9h'];
+        end
+        load(ship_AIS_file);
+    case 'MSCANGELA'
+        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MSCANGELA_' arrID '_2007_2_5h'];
+        load(ship_AIS_file);
+    case 'KSLSANFRANCISCO'
+        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\KSLSANFRANCISCO_' arrID '_1407_3_6h.mat'];
+        load(ship_AIS_file);
+     
     case 'OCEANEXCONNAIGRA'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\OCEANEXCONNAIGRA_' arrID '_1807_18_21h.mat'];
         load(ship_AIS_file);
@@ -70,7 +88,7 @@ switch bateau
                 duree=60*15;
         end
     case 'CORIOLIS_PERPH'
-        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\CORIOLISII_' arrID '_1307_23_30h.mat'];
+        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\CORIOLISII_' arrID '_1407_0_3h.mat'];
         load(ship_AIS_file);
     case 'CORIOLIS_PERPP'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\CORIOLISII_' arrID '_3007_13_18h.mat'];
@@ -101,7 +119,9 @@ switch bateau
     case 'ALICUDI'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_' arrID '_1708_7_8h.mat'];
         load(ship_AIS_file);
-        
+        heure=7;
+        minute=25;
+        duree=50*60;
     case 'Nacc'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_' arrID '_508_6_9h.mat'];
         load(ship_AIS_file);

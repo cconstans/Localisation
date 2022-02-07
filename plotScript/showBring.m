@@ -53,7 +53,7 @@ end
 % -------------------------------------------------------------------
 if any( showFig == 2 )
     Energie_dB = 10*log10(Energie);
-
+    
     figure(2)
     plot(azimut360, Energie_dB,'k','LineWidth',2);
     hold on
@@ -75,7 +75,7 @@ end
 if any( showFig == 3 )
     [arrLoc, arr] = getArrInfo(arrID,AntenneCorrigee);
     Energie_NORM = Energie/max(Energie);
-
+    
     aziCircle = linspace(0,2*pi,1000);
     
     figure(3)
@@ -83,13 +83,13 @@ if any( showFig == 3 )
     hold on
     plot(arr.xh,arr.yh,'r.','MarkerSize',14)
     plot([arr.xh arr.xh(1)],[arr.yh arr.yh(1)],'Color',[0.5 0.5 0.5])
-
-%     plot(arrDiameter*sin(aziCircle),arrDiameter*cos(aziCircle),'k')
+    
+    %     plot(arrDiameter*sin(aziCircle),arrDiameter*cos(aziCircle),'k')
     for u = 1 : length(arr.xh)
         text(arr.xh(u)+0.3,arr.yh(u),['h' num2str(u)])
     end
-        title(['Azimut ' num2str(azimut360(indAziCible)) '°'])
-
+    title(['Azimut ' num2str(azimut360(indAziCible)) '°'])
+    
     xlabel(' x (m)')
     ylabel(' y (m)')
     grid on
@@ -117,36 +117,36 @@ end % end showfig3
 % ---------------------------------------------------------------------
 % Figure 4: spectrogramme 1 voie
 % ---------------------------------------------------------------------
-
+if any ( showFig == 4 )
+    
     clear ax
     %[vec_temps, vec_freq, MAT_t_f_STFT_complexe, MAT_t_f_STFT_dB] = COMP_STFT_snapshot(MAT_s_vs_t_h(:,1),0, fe, spec.winSz, spec.rec, spec.wpond, spec.zp);
     %[vec_temps_FV, vec_freq_FV, MAT_t_f_STFT_complexe, MAT_t_f_STFT_dB_FV] = COMP_STFT_snapshot(s_FV,t0-Ns/2*1/fe, fe, spec.winSz, spec.rec, spec.wpond, spec.zp);
     
     % Get spectro of cible
-    [PdbC, timeC, freqC,reconC] = beamForming(arrID, wav.db , angleM , spgm,AntenneCorrigee,'specmethod','spectro');
+    [PdbC, timeC, freqC,reconC] = beamForming(arrID, wav.db ,  angleM(1,ifile) , spgm,AntenneCorrigee,'specmethod','spectro');
     PdbC = squeeze(PdbC);
-     [~,idt]=max(sum(PdbC,2));
+    [~,idt]=max(sum(PdbC,2));
     Tmax=timeC(idt);
-%     disp('Wong time in figure4')
+    %     disp('Wong time in figure4')
     %tRecon =1-spgm.fs/2*1/spgm.fs+(0:spgm.ns-1)*1/spgm.fs;
-        if any ( showFig == 4 )
-
+    
     t1=floor(spgm.ns/4);
     tRecon =[time_s(t1:end) time_s(1:t1-1) ];
-        
+    
     figure(4)
     ax(1) = subplot(5,1,1);
     plot(tRecon,reconC,'k')
     title(['Azimut ' num2str(azimut360(indAziCible)) '°'])
     
     ax(2) = subplot(5,1,[2:5]);
-    pcolor(timeC, freqC,PdbC'); shading flat;
+    pcolor(timeC, freqC,PdbC(:,:)'); shading flat;
     ylim([spgm.im.freqlims])
     xlabel(' Time (s)')
     ylabel(' Frequency (Hz)')
     caxis(spgm.im.clims)
     
-   
+    
     %caxis([Lmin Lmax])
     colormap jet
     
@@ -222,7 +222,7 @@ if any ( showFig == 5)
         set(gca,'layer','top','gridAlpha',0.5,'XMinorGrid','on','YMinorGrid','on','MinorGridAlpha',0.3,'XMinorTick','on','YMinorTick','on')
     end
     
-%     sgtitle(fileList{ifile},'interpreter','none')
+    %     sgtitle(fileList{ifile},'interpreter','none')
     
     % Color bar
     cbPos = [sp.pos{end}(1)+sp.pos{end}(3)+0.01 sp.pos{end}(2) 0.01 (sp.height - sp.bedge - sp.tedge)/sp.height];%sp.pos{end}(4)*(sp.nby-1)+sp.pos{1}(4)+sp.spacey ];
@@ -292,7 +292,7 @@ if any ( showFig == 6)
         set(gca,'layer','top','gridAlpha',0.5,'XMinorGrid','on','YMinorGrid','on','MinorGridAlpha',0.3,'XMinorTick','on','YMinorTick','on')
     end
     
-%     sgtitle(fileList{ifile},'interpreter','none')
+    %     sgtitle(fileList{ifile},'interpreter','none')
     
     % Color bar
     cbPos = [sp.pos{end}(1)+sp.pos{end}(3)+0.01 sp.pos{end}(2) 0.01 (sp.height - sp.bedge - sp.tedge)/sp.height];%sp.pos{end}(4)*(sp.nby-1)+sp.pos{1}(4)+sp.spacey ];

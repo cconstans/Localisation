@@ -2,12 +2,12 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
     
 % ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316004433_MLB_508_22_24h.mat';
 % ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316023339_MLB_1408_22_24h.mat';
-ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\OCEANEXCONNAIGRA_CLD_1807_19_21h.mat';
+ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\LAKEONTARIO_CLD_1507_9_11h.mat';
 % ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_CLD_2107_11_14h.mat'];
 % ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_MLB_1708_7_8h.mat'];
 
 % result_file='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\estim_loc_ALICUDI';
-result_file='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\estim_loc_OCEANEXCONNAIGRA_circ';
+result_file='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\estim_loc_LAKEONTARIO';
 videoName = result_file ;
 
 load(ship_AIS_file);

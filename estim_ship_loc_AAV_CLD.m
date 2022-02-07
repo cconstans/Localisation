@@ -1,7 +1,7 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 AntenneCorrigee=1;
-bateau='OCEANEXCONNAIGRA';
+bateau='LAKEONTARIO';
 switch bateau
 %     case 'BLUEALEXANDRA'
 %         if AntenneCorrigee
@@ -14,6 +14,28 @@ switch bateau
 %         ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_CLD_2107_11_14h.mat'];
 %         ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_AAV_2107_11_14h.mat'];
 %         
+    case 'LAKEONTARIO'
+        if AntenneCorrigee
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1507_9_11h_f=[20_1800]_220203_124807';
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1507_9_11h_f=[20_1800]_220203_124835';
+        else
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1507_9_11h_f=[20_1800]_220203_124845_circ';
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1507_9_11h_f=[20_1800]_220203_124921_circ';
+        end
+        ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\LAKEONTARIO_CLD_1507_9_11h.mat'];
+        ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\LAKEONTARIO_AAV_1507_9_11h.mat'];
+%        %       
+    case 'MSCANGELA'
+        if AntenneCorrigee
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2007_2_5h_f=[20_1800]_220203_120509';
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2007_2_5h_f=[20_1800]_220203_120459';
+        else
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2007_2_5h_f=[20_1800]_220203_120554_circ';
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2007_2_5h_f=[20_1800]_220203_120544_circ';
+        end
+        ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MSCANGELA_CLD_2007_2_5h.mat'];
+        ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MSCANGELA_AAV_2007_2_5h.mat'];
+%        %         
     case 'OCEANEXCONNAIGRA'
         if AntenneCorrigee
             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1807_20_22h_f=[20_400]_211217_151153';
@@ -35,6 +57,16 @@ switch bateau
         end
         ship_AIS_CLD='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_CLD_2107_5_7h.mat';
         ship_AIS_AAV='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_2107_5_7h.mat';
+    case 'CORIOLIS_PERPH'
+        if AntenneCorrigee
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_1407_0_3h_f=[50_1800]_220203_104013';
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_1407_0_3h_f=[50_1800]_220203_095348';
+%         else
+%             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_5_7h_211207_124722_circ';
+%             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_5_7h_211207_124709_circ';
+        end
+        ship_AIS_CLD='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\CORIOLISII_CLD_1407_0_3h.mat';
+        ship_AIS_AAV='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\CORIOLISII_AAV_1407_0_3h.mat';
 end
 
 load(dataAAV)
@@ -76,7 +108,7 @@ x_ship=y_ship.*tand(angleAAV);
 
 dist2AAV=sqrt(x_ship.^2+y_ship.^2);
 dist2CLD=sqrt((x_ship-x_CLD).^2+(y_ship-y_CLD).^2);
-
+%%
 figure,plot(vec_temps_ship/(24*3600),distCLD_ais/1e3,'k')
 hold on, plot(ptime,dist2CLD,'k.');
 hold on, plot(vec_temps_ship/(24*3600),distAAV_ais/1e3,'r')
@@ -88,6 +120,23 @@ if AntenneCorrigee
     title([ 'Distance (km) antenne corrigée'])
 else
     title([ 'Distance (km) antenne non corrigée'])
+end
+%% Distance to AIS point
+x_ais_select=interp1(vec_temps_ship/(24*3600),x_ship_km,datenum(ptime));
+y_ais_select=interp1(vec_temps_ship/(24*3600),y_ship_km,datenum(ptime));
+delta=sqrt((x_ais_select-x_ship).^2+(y_ais_select-y_ship).^2);
+figure, plot(ptime,delta,'kx'); 
+delta(delta==Inf)=[];
+rmse=sqrt(mean(delta(~isnan(delta)).^2));
+mean_error=mean(delta(~isnan(delta)));
+hold on, plot([ptime(1) ptime(end)],[rmse rmse],'r-')
+text(datenum(ptime(round(end/2))), rmse*1.2,['RMSE=' num2str(rmse,3) 'km'],'Color','r')
+hold on, plot([ptime(1) ptime(end)],[mean_error mean_error],'b-')
+text(datenum(ptime(round(end/2))), mean_error*1.2,['Mean error=' num2str(mean_error,3) 'km'],'Color','b')
+if AntenneCorrigee
+    title({'Error Bring / AIS position (km)', 'Antenne corrigée'})
+else
+    title({'Error Bring / AIS position (km)', 'Antenne non corrigée'})
 end
 %%
 

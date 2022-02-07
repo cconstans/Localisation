@@ -5,7 +5,7 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 
-site='MLB';
+site='PRC';
 video=0;
 % method=1; %0: supress angles when 1 hydro is overlagged. 1: suppress only overlags.
 
@@ -78,7 +78,7 @@ BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTra
 
 load(BoatInfo);
 MinDist=400; % minimum distance for plane wave approx
-MaxDist=10e3; % minimum distance for plane wave approx
+MaxDist=10e3; % maximum distance for clear signal
 
 if startID
     angle(1:startID-1)=[];
@@ -87,14 +87,26 @@ if startID
 end
 
 for n=1:Nboats
-    load(ship_AIS_file{n});
+    load(ship_AIS_file{n})
     [anglen, distn] = getRealAngle(arrID , vec_lat_ship, vec_long_ship);
     distn(vec_temps_ship<timelim(n,1) | vec_temps_ship>timelim(n,2))=[];
     anglen(vec_temps_ship<timelim(n,1) | vec_temps_ship>timelim(n,2))=[];
-    vec_temps_ship(vec_temps_ship<timelim(n,1) | vec_temps_ship>timelim(n,2))=[];
+    timen=datetime(vec_temps_ship/(24*3600),'ConvertFrom','datenum');
+
+    timen(vec_temps_ship<timelim(n,1) | vec_temps_ship>timelim(n,2))=[];
+    
+    timen(distn<MinDist | distn>MaxDist)=[];
+    anglen(distn<MinDist | distn>MaxDist)=[];
+    distn(distn<MinDist | distn>MaxDist)=[];
+    
     angle_boats{n}=anglen;
     dist_boats{n}=distn;
-    time_boats{n}=datetime(vec_temps_ship/(24*3600),'ConvertFrom','datenum');
+    time_boats{n}=timen;
+    
+%     size(anglen)
+%     figure, plot(anglen); 
+%     max(distn)
+%     min(distn)
 end
 
 
@@ -115,13 +127,6 @@ for n=1:Nboats
     time=[time;time_boats{n}'];
     dist=[dist,dist_boats{n}'];
 end
-% angle=[angle,angle1',angle3'];
-% time=[time',time1,time3];
-% dist=[dist,dist1',dist3'];
-
-time(dist<MinDist | dist>MaxDist)=[];
-angle(dist<MinDist | dist>MaxDist)=[];
-dist(dist<MinDist | dist>MaxDist)=[];
 
 % figure, plot(angle)
 % hold on, plot(dist); legend('angle (°)','distance (m)')
@@ -281,6 +286,7 @@ Dy=max(Y)-min(Y);
 Dz=max(Z)-min(Z);
 perim_th=2*pi*9.8;
 perimetre=sum(sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2));
+
 figure, 
 subplot(121),
 

@@ -9,18 +9,20 @@ openData = false;
 typeHL = 'LF';
 AntenneCorrigee=0;
 DataSave=1;
-bateau='CORIOLIS_PERPP';
-arrID='MLB';
+bateau='LAKEONTARIO';
+arrID='AAV';
 
 % Spectro parameter
+% fmin = 50;
+% fmax = 1800;
 fmin = 20;
-fmax = 400;
+fmax = 1800;
 
 [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
 Ns = 2^16;              % Total number of sample
-laps=240;
+laps=120;
 Ntime=duree/laps;
 clear ptime
 ptime(1)=datetime(2021,mois,jour,heure,minute,0);

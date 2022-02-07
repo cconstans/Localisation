@@ -64,11 +64,11 @@ switch bateau
     case 'ALICUDI'
                 
         if AntenneCorrigee
-            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1708_7_8h_211207_090432';
-            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1708_7_8h_211207_090447';
+            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1708_7_8h_f=[50_1800]_220202_153226.mat';
+            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1708_7_8h_f=[50_1800]_220202_152828.mat';
         else
-            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1708_7_8h_211206_174155_circ';
-            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1708_7_8h_211206_174300_circ';
+            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1708_7_8h_f=[50_1800]_220202_152838_circ.mat';
+            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1708_7_8h_f=[50_1800]_220202_153158_circ.mat';
         end
         ship_AIS_PRC='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_PRC_1708_7_8h.mat';
         ship_AIS_MLB='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_MLB_1708_7_8h.mat';      

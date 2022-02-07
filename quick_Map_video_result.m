@@ -27,10 +27,10 @@ winSize = 0.1;
 % lon_max = max([lon lon_ais loc_site1(2) loc_site2(2)])+winSize;
 % lat_min =  min([lat lat_ais loc_site1(1) loc_site2(1)])-winSize;
 % lat_max =  max([lat lat_ais loc_site1(1) loc_site2(1)])+winSize;
-lon_min = min([ lon_ais loc_site1(2) loc_site2(2)])-winSize;
-lon_max = max([ lon_ais loc_site1(2) loc_site2(2)])+winSize;
-lat_min =  min([ lat_ais loc_site1(1) loc_site2(1)])-winSize;
-lat_max =  max([ lat_ais loc_site1(1) loc_site2(1)])+winSize;
+lon_min = min([ lon(abs(lon)<Inf)' lon_ais loc_site1(2) loc_site2(2)])-winSize;
+lon_max = max([ lon(abs(lon)<Inf)' lon_ais loc_site1(2) loc_site2(2)])+winSize;
+lat_min =  min([ lat(abs(lat)<Inf)' lat_ais loc_site1(1) loc_site2(1)])-winSize;
+lat_max =  max([ lat(abs(lat)<Inf)' lat_ais loc_site1(1) loc_site2(1)])+winSize;
 
 % Les isobathes à contourer
 isobath = [0:10:450];
