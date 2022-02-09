@@ -12,14 +12,15 @@ DataSave=1;
 % baleine='MLB_0408_9h_1';
 % baleine='MLB_0408_12h_1';
 % baleine='MLB_0408_12h_2';
-baleine='PRC_0408_12h_1';
+% baleine='PRC_0408_12h_1';
 % baleine='PRC_0408_12h_2';
-% baleine='PRC_0408_9h_1';
+baleine='PRC_0408_9h_1';
 % baleine='PRC_0408_9h_2';
 % baleine='CLD_1607_6h';
-% baleine='AAV_1407_6h';
+% baleine='AAV_1407_22h';
 % baleine='blue_CLD_1507_9h';
-% baleine='blue_CLD_1507_9h';
+% baleine='blue_CLD_1507_9h_2';
+% baleine='blue_AAV_1507_9h';
 % baleine='blue_AAV_1507_9h_2';
 % baleine='blue_AAV_1307_23h';
 % baleine='blue_CLD_1307_23h';
@@ -149,7 +150,7 @@ showBring;
 c0=arr.c;
 hydrofile=arr.hydrofile;
 if DataSave
-    save([folderOut '.mat'],'folderOut','hydrofile','baleine','wav','c0','angleA','angleM','ptime','spgm','Energie','minute','duree','arrID','fmin','fmax','AntenneCorrigee','Tmax')
+    save([folderOut '.mat'],'folderOut','hydrofile','baleine','wav','c0','angleA','angleM','ptime','spgm','Energie','minute','duree','arrID','fmin','fmax','AntenneCorrigee')
 end
 % %%
 % 

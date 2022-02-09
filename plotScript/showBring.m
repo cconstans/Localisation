@@ -78,7 +78,7 @@ if any( showFig == 3 )
     
     aziCircle = linspace(0,2*pi,1000);
     
-    figure(3)
+    figure,
     plot(mean(arr.xh),mean(arr.yh),'k+')
     hold on
     plot(arr.xh,arr.yh,'r.','MarkerSize',14)

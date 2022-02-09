@@ -2,6 +2,9 @@ function [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mm
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID)
 
 switch bateau
+    case 'OCEANECHOII'
+        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\OCEANECHOII_' arrID '_1307_21_24h'];
+        load(ship_AIS_file);
     case 'LAKEONTARIO'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\LAKEONTARIO_' arrID '_1507_9_11h'];
         load(ship_AIS_file);

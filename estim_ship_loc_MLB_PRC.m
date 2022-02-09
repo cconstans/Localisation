@@ -1,5 +1,5 @@
 clear 
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 bateau='ALICUDI';
 switch bateau
     case 'JJ'
@@ -143,6 +143,24 @@ if AntenneCorrigee
 else
     title([ 'Distance (km) antenne non corrigée'])
 end
+%% Distance to AIS point
+x_ais_select=interp1(vec_temps_ship/(24*3600),x_ship_km,datenum(ptime));
+y_ais_select=interp1(vec_temps_ship/(24*3600),y_ship_km,datenum(ptime));
+delta=sqrt((x_ais_select-x_ship).^2+(y_ais_select-y_ship).^2);
+figure, plot(ptime,delta,'kx'); 
+delta(delta==Inf)=[];
+rmse=sqrt(mean(delta(~isnan(delta)).^2));
+mean_error=mean(delta(~isnan(delta)));
+hold on, plot([ptime(1) ptime(end)],[rmse rmse],'r-')
+text(datenum(ptime(round(end/2))), rmse*1.2,['RMSE=' num2str(rmse,3) 'km'],'Color','r')
+hold on, plot([ptime(1) ptime(end)],[mean_error mean_error],'b-')
+text(datenum(ptime(round(end/2))), mean_error*1.2,['Mean error=' num2str(mean_error,3) 'km'],'Color','b')
+if AntenneCorrigee
+    title({'Error Bring / AIS position (km)', 'Corrected Array'})
+else
+    title({'Error Bring / AIS position (km)', 'Non Corrected Array'})
+end
+ylim([00 12])
 %%
 
 figure, 

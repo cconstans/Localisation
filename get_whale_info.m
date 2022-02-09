@@ -22,7 +22,7 @@ switch baleine
         arrID='PRC';
         file_wav='F:\Bring_Dep_2\PRC_wav\PRC_LF_20210804T122000_1713_0.wav';
         minute=4;
-        second=23;
+        second=23.5;
         ptime=datetime(2021,08,04,12,20+minute,second); 
     case 'PRC_0408_12h_2'
         arrID='PRC';
@@ -33,7 +33,8 @@ switch baleine
     case 'PRC_0408_9h_1'
         arrID='PRC';
         file_wav='C:\Users\CHARLOTTE\Documents\Bring\Perce vocalises\PRC_LF_20210804T090000_1672_0.wav';
-
+%  fmin = 50;
+%         fmax = 250;
         minute=3;
         second=0.5;
         ptime=datetime(2021,08,04,9,minute,second);
@@ -52,15 +53,15 @@ switch baleine
         second=3.5;
         ptime=datetime(2021,07,16,6,15+minute,second);
         duree=1;
-    case 'AAV_1407_6h'
+    case 'AAV_1407_22h'
         arrID='AAV';
         file_wav='D:\Bring_Dep_1_Wav\AAV\LF\AAV_2591LF_20210714T221500_0943_0.wav';
         minute=1;
         second=26;
         ptime=datetime(2021,07,14,22,15+minute,second);
-        
+%         duree=1;
         fmin = 100;
-        fmax = 200;
+        fmax = 250;
         %         duree=1;
     case 'blue_CLD_1507_9h'
         arrID='CLD';

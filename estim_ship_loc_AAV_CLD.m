@@ -1,7 +1,7 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 AntenneCorrigee=1;
-bateau='LAKEONTARIO';
+bateau='MSCANGELA';
 switch bateau
 %     case 'BLUEALEXANDRA'
 %         if AntenneCorrigee
@@ -35,6 +35,8 @@ switch bateau
         end
         ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MSCANGELA_CLD_2007_2_5h.mat'];
         ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MSCANGELA_AAV_2007_2_5h.mat'];
+
+        duree=3600*2.25;
 %        %         
     case 'OCEANEXCONNAIGRA'
         if AntenneCorrigee
@@ -76,8 +78,9 @@ angleAAV=angleM;
 load(dataCLD)
 ptimeCLD=ptime;
 angleCLD=angleM;
-
+ptime_end=datetime(2021,mois,jour,heure,minute,duree);
 [ptime,id_AAV,id_CLD]=intersect(ptimeAAV,ptimeCLD);
+ptime(ptime>ptime_end)=[];
 angleCLD=angleCLD(id_CLD);
 angleAAV=angleAAV(id_AAV);
 % mois=8;
@@ -126,7 +129,8 @@ x_ais_select=interp1(vec_temps_ship/(24*3600),x_ship_km,datenum(ptime));
 y_ais_select=interp1(vec_temps_ship/(24*3600),y_ship_km,datenum(ptime));
 delta=sqrt((x_ais_select-x_ship).^2+(y_ais_select-y_ship).^2);
 figure, plot(ptime,delta,'kx'); 
-delta(delta==Inf)=[];
+delta(delta>300)=[];
+% delta(delta==Inf)=[];
 rmse=sqrt(mean(delta(~isnan(delta)).^2));
 mean_error=mean(delta(~isnan(delta)));
 hold on, plot([ptime(1) ptime(end)],[rmse rmse],'r-')
@@ -138,6 +142,7 @@ if AntenneCorrigee
 else
     title({'Error Bring / AIS position (km)', 'Antenne non corrigée'})
 end
+ylim([0 250])
 %%
 
 figure,

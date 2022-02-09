@@ -7,9 +7,9 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 openData = false;
 % Path information : folderIn = wav folder / folderOut = figure output folder
 typeHL = 'LF';
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 DataSave=1;
-bateau='LAKEONTARIO';
+bateau='OCEANECHOII';
 arrID='AAV';
 
 % Spectro parameter

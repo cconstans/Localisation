@@ -2,14 +2,16 @@ clear
 AntenneCorrigee=1;
 % baleine='0408_9h_1';
 % baleine='blue_1507_9h';
-baleine='0408_12h_1';
+baleine='blue_1507_9h';
 switch baleine
     case '0408_9h_1'
         site='MLB_PRC';
         if AntenneCorrigee
-            data1='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\MLB_0408_9h_1_220126_153616';
-            data2='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\PRC_0408_9h_1_220126_152701';
+            data1='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\MLB_0408_9h_1_220208_164707';
+            data2='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\PRC_0408_9h_1_220208_164833';
         else
+            data1='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\MLB_0408_9h_1_220208_164731_circ';
+            data2='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\whales\PRC_0408_9h_1_220208_164754_circ';
             
         end
     case '0408_12h_1'
