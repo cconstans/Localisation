@@ -64,7 +64,7 @@ angleA = nan(nbF,nbPk);
 
 for ifile=1:length(fileList)
     disp(['Executing beamforming for file ' num2str(ifile) '/' num2str(length(fileList))])
-    close all
+%     close all
     
     % Reading wav and extract values
     [wav.s,wav.fs, time_s, audioInfo] = readBring([folderIn fileList{ifile}], ptime(ifile),'duration',spgm.im.dur,'buffer',buffer);

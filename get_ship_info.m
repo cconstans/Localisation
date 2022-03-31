@@ -8,19 +8,9 @@ switch bateau
     case 'LAKEONTARIO'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\LAKEONTARIO_' arrID '_1507_9_11h'];
         load(ship_AIS_file);
-    case 'MIEDWIE'
-        switch arrID
-            case 'CLD'
-                ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MIEDWIE_CLD_1607_6_8h'];
-            case 'AAV'
-                ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MIEDWIE_AAV_1607_7_9h'];
-        end
-        load(ship_AIS_file);
+ 
     case 'MSCANGELA'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MSCANGELA_' arrID '_2007_2_5h'];
-        load(ship_AIS_file);
-    case 'KSLSANFRANCISCO'
-        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\KSLSANFRANCISCO_' arrID '_1407_3_6h.mat'];
         load(ship_AIS_file);
      
     case 'OCEANEXCONNAIGRA'
@@ -120,11 +110,15 @@ switch bateau
         load(ship_AIS_file);
         
     case 'ALICUDI'
-        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_' arrID '_1708_7_8h.mat'];
+        ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_' arrID '_1708_7_9h.mat'];
         load(ship_AIS_file);
+        %         heure=7;
+        %         minute=25;
+        %         duree=50*60;
+        
         heure=7;
-        minute=25;
-        duree=50*60;
+        minute=0;
+        duree=1.5*3600;
     case 'Nacc'
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_' arrID '_508_6_9h.mat'];
         load(ship_AIS_file);
@@ -174,14 +168,17 @@ switch bateau
                 minute=5;
                 duree=25*60;
         end
-    case '316034372'
+    case 'QUEBEC_508' %NACC QUEBEC
         switch arrID
             case 'PRC'
                 ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat';
                 load(ship_AIS_file);
-                heure=7;
-                minute=0;
-                duree=50*60;
+%                 heure=6;
+%                 minute=20;
+%                 duree=2*3600;
+                heure=6;
+                minute=30;
+                duree=2*3600;
             case 'MLB'
                 ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_MLB_508_6_9h.mat';
                 load(ship_AIS_file);
@@ -189,7 +186,37 @@ switch bateau
                 minute=0;
                 duree=50*60;
         end
-    case '316023339'
+    case 'QUEBEC_3007' %NACC QUEBEC
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_PRC_3007_8_10h.mat';
+                load(ship_AIS_file);
+                heure=8;
+                minute=45;
+                duree=3600;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_MLB_3007_8_10h.mat';
+                load(ship_AIS_file);
+                heure=8;
+                minute=45;
+                duree=3600;
+        end
+    case 'STRAITHUNTER' 
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\STRAITHUNTER_PRC_3007_22_25h.mat';
+                load(ship_AIS_file);
+                heure=22;
+                minute=30;
+                duree=3600*2;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\STRAITHUNTER_MLB_3007_22_25h.mat';
+                load(ship_AIS_file);
+                heure=22;
+                minute=30;
+                duree=3600*2;
+        end
+    case 'THUNDER_BAY' % THUNDER BAY 
         switch arrID
             case 'PRC'
                 ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316023339_PRC_1408_22_24h.mat';
@@ -204,6 +231,111 @@ switch bateau
                 minute=4;
                 duree=3600+60*41;
         end
+    case 'SAMUELRISLEY'  
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SAMUELRISLEY_PRC_3107_22_24h.mat';
+                load(ship_AIS_file);
+                heure=22;
+                minute=30;
+                duree=60*35;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SAMUELRISLEY_MLB_3107_22_24h.mat';
+                load(ship_AIS_file);
+               heure=22;
+                minute=30;
+                duree=60*35;
+        end
+    case 'GLORYRIVER'  
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\GLORYRIVER_PRC_308_6_9h.mat';
+                load(ship_AIS_file);
+                heure=8;
+                minute=0;
+                duree=3600;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\GLORYRIVER_MLB_308_6_9h.mat';
+                load(ship_AIS_file);
+                heure=8;
+                minute=0;
+                duree=3600;
+        end
+    case 'SANDRAMARY'  
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SANDRAMARY_PRC_408_23_25h.mat';
+                load(ship_AIS_file);
+                heure=23;
+                minute=30;
+                duree=3600*1.5;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SANDRAMARY_MLB_408_23_25h.mat';
+                load(ship_AIS_file);
+               heure=23;
+                minute=30;
+                duree=3600*1.5;
+        end
+    case 'ALICUDI_0708'  
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_PRC_708_2_5h.mat';
+                load(ship_AIS_file);
+                heure=2;
+                minute=0;
+                duree=3600*3;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_MLB_708_2_5h.mat';
+                load(ship_AIS_file);
+                heure=2;
+                minute=0;
+                duree=3600*3;
+        end
+    case 'JJ_0808'  
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\JEAN-JOSEPH_PRC_808_15_18h.mat';
+                load(ship_AIS_file);
+                heure=15;
+                minute=0;
+                duree=3600+10*60;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\JOSEPH_MLB_808_15_18h.mat';
+                load(ship_AIS_file);
+                heure=15;
+                minute=0;
+                duree=3600+10*60;
+        end
+    case 'JJ_1108'  
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\JEAN-JOSEPH_PRC_1108_3_5h.mat';
+                load(ship_AIS_file);
+                heure=3;
+                minute=30;
+                duree=1.5*3600;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\JEAN-JOSEPH_MLB_1108_3_5h.mat';
+                load(ship_AIS_file);
+                heure=3;
+                minute=30;
+                duree=1.5*3600;
+        end
+    case 'BRIGHTIMABARI'  
+        switch arrID
+            case 'PRC'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BRIGHTIMABARI_PRC_1008_4_7h.mat';
+                load(ship_AIS_file);
+                heure=4;
+                minute=0;
+                duree=3600*2.5;
+            case 'MLB'
+                ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BRIGHTIMABARI_MLB_1008_4_7h.mat';
+                load(ship_AIS_file);
+                heure=4;
+                minute=0;
+                duree=3600*2.5;
+        end
 end
 
 switch arrID
@@ -212,8 +344,8 @@ switch arrID
     case 'CLD'
         folderIn = ['D:/Bring_Dep_1_Wav/' arrID '/' 'LF' '/'];
     case 'MLB'
-        folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
+        folderIn = ['H:\Bring_Dep_2\' arrID '_wav\'];
     case 'PRC'
-        folderIn = ['F:\Bring_Dep_2\' arrID '_wav\'];
+        folderIn = ['H:\Bring_Dep_2\' arrID '_wav\'];
 end
 end

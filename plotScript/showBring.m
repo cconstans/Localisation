@@ -55,6 +55,7 @@ if any( showFig == 2 )
     Energie_dB = 10*log10(Energie);
     
     figure(2)
+    hold off
     plot(azimut360, Energie_dB,'k','LineWidth',2);
     hold on
     xlabel(' azimut (°)','interpret','tex')
@@ -78,7 +79,8 @@ if any( showFig == 3 )
     
     aziCircle = linspace(0,2*pi,1000);
     
-    figure,
+    figure(3),
+    hold off
     plot(mean(arr.xh),mean(arr.yh),'k+')
     hold on
     plot(arr.xh,arr.yh,'r.','MarkerSize',14)
@@ -305,6 +307,81 @@ if any ( showFig == 6)
     if printFig ==true
         print([folderOut 'subplotSpectroNVoieCible_' outName '_p' num2str(ifile)  '.png'], '-r150','-dpng', '-f6')
     end
+end
+
+%  -------------------------------------------------------------------
+% Figure 7 :  Spectogram voie 1 + cible 1
+if any ( showFig == 7)
+    
+    
+    % Figure parameter
+    
+    %     sp.height=30; sp.width=30; sp.nbx=1; sp.nby=1;
+    %     sp.ledge=4; sp.redge=6; sp.tedge=3; sp.bedge=3;
+    %     sp.spacex=0.5; sp.spacey=1;
+    %     sp.pos=subplot2(sp);
+    
+    
+    % Get the beamforming spectrogram
+    [Pdb, timeV, freqV] = beamForming(arrID, wav.db , angleM, spgm,AntenneCorrigee,'specmethod','spectro');
+    
+    %[recon, timeV, freqV] = beamForming(matPondahf, matFFT, azimut, freq, spec);
+    
+    % ------ Figure plot --------
+    figure(7)
+    %     set(gcf, 'PaperPosition', [0 0 20 10]);    % can be bigger than screen
+    %     meshNvoie = reshape(1:Nvoie,sp.nbx,sp.nby);
+    subplot(211)
+    [~,freq1,time1,tmp] = spectrogram(wav.db(:,1),spgm.win.val,spgm.win.novlp,spgm.win.nfft,spgm.fs);
+    Pdb1 = 10*log10(tmp);
+    
+    pcolor(time1, freq1, Pdb1); shading flat;
+    ylim([20 300])
+    ylabel(' f (Hz)')
+    title({arrID,' Hydrophone 1'},'FontSize',16)
+    %     ax=gca;
+    %     ax.XTickLabel =[];
+    
+    colormap jet
+    caxis(spgm.im.clims)
+    cb = colorbar;
+    ylabel(cb,'Power (dB)')
+    if printFig ==true
+        print([folderOut 'spectrogramChanelOne_' outName '_p' num2str(ifile)  '.png'], '-r150','-dpng', '-f1')
+    end
+    
+    subplot(212)
+    M =  squeeze(Pdb);
+    pcolor(timeV, freqV,(M')); shading flat;
+    ylim([spgm.im.freqlims])
+    
+    ylabel(' f (Hz)')
+    
+    xlabel(' t (s)')
+    
+    
+    title(['Beam forming at ' num2str(angleM) '°'],'FontSize',16)
+    
+    caxis(spgm.im.clims)
+    colormap jet
+    cb = colorbar;
+    ylabel(cb,'Power (dB)')
+    grid on
+    set(gca,'layer','top','gridAlpha',0.5,'XMinorGrid','on','YMinorGrid','on','MinorGridAlpha',0.3,'XMinorTick','off','YMinorTick','on')
+    
+    %     sgtitle(fileList{ifile},'interpreter','none')
+    
+    % Color bar
+    cbPos = [sp.pos{end}(1)+sp.pos{end}(3)+0.01 sp.pos{end}(2) 0.01 (sp.height - sp.bedge - sp.tedge)/sp.height];%sp.pos{end}(4)*(sp.nby-1)+sp.pos{1}(4)+sp.spacey ];
+    cb= colorbar;%('Position',cbPos);
+    cb.Position = cbPos;
+    ax(end).Position = sp.pos{end};
+    ylabel(cb,'Power (dB)')
+    
+end
+
+if printFig ==true
+    print([folderOut 'subplotSpectroNVoieCible_' outName '_p' num2str(ifile)  '.png'], '-r150','-dpng', '-f6')
 end
 
 

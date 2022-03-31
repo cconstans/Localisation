@@ -9,20 +9,20 @@ openData = false;
 typeHL = 'LF';
 AntenneCorrigee=1;
 DataSave=1;
-bateau='OCEANECHOII';
-arrID='AAV';
+bateau='SAMUELRISLEY';
+arrID='MLB';
 
 % Spectro parameter
 % fmin = 50;
 % fmax = 1800;
-fmin = 20;
-fmax = 1800;
+fmin = 50;
+fmax = 300;
 
 [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
 Ns = 2^16;              % Total number of sample
-laps=120;
+laps=60;
 Ntime=duree/laps;
 clear ptime
 ptime(1)=datetime(2021,mois,jour,heure,minute,0);
@@ -32,8 +32,8 @@ ptime(it)=datetime(ptime(it-1)+seconds(laps));
 end
 
 % Figure parameters
-% showFig = [1 2 3 4 5 6 7 ]       % Figure number to print
 showFig = [ ]       % Figure number to print
+% showFig = [ ]       % Figure number to print
 printFig = false;    % Saving figure to a folder
 nbPk = 4 ;          % Nomber of side lobe to keep
 
@@ -84,6 +84,7 @@ if isempty(idx_fin) idx_fin=length(vec_temps_ship); end
 
 figure
 pcolor(arrIncol(datenum(ptime)), 1:360, 10*log10(matEnergie'))
+% pcolor(ptime, 1:360, 10*log10(matEnergie'))
 shading flat
 cb = colorbar('location','eastoutside');
 ylabel(cb, 'Energy (dB)');
@@ -93,7 +94,9 @@ hm = plot(ptime,angleM,'o','color','k','markersize',3,'markerfacecolor','k');hol
 hm2 = plot(vec_temps_ship(idx_deb:idx_fin)/(24*3600),angle(idx_deb:idx_fin),'k','LineWidth',2);
 
 if AntenneCorrigee
-    title([ bateau ' ' arrID ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz'])
+    title([ bateau ' ' num2str(jour) '/' num2str(mois) ' ' arrID ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz'])
+%     title({[ bateau ' ' num2str(jour) '/' num2str(mois) ' ' arrID ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz'];'Apprentissage 1 bateau N-S'})
 else
-    title([ bateau ' ' arrID, ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz non corrigée ' ])
+    title([ bateau ' ' num2str(jour) '/' num2str(mois) ' ' arrID, ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz non corrigée ' ])
 end
+saveas(gcf,[folderOut '.fig']);

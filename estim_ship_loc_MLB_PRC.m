@@ -1,17 +1,22 @@
 clear 
 AntenneCorrigee=1;
-bateau='ALICUDI';
+bateau='SAMUELRISLEY';
 switch bateau
-    case 'JJ'
-        % Jean-Joseph
+    case 'SAMUELRISLEY'
         if AntenneCorrigee
-            %     dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1608_7_8h_211117_141916';
-            %     dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1608_7_8h_211117_123140';
-            %     dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1608_7_8h_211122_122329';
-            %     dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1608_7_8h_211122_122344';
+            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_3107_22_23h_f=[50_300]_220330_164232';
+            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_3107_22_23h_f=[50_300]_220330_153617';
+        else
+            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_3107_22_23h_f=[50_300]_220330_153510_circ';
+            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_3107_22_23h_f=[50_300]_220330_153437_circ';
+        end
+        ship_AIS_PRC='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SAMUELRISLEY_PRC_3107_22_24h.mat';
+        ship_AIS_MLB='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SAMUELRISLEY_MLB_3107_22_24h.mat';
+        
+    case 'JJ'
+        if AntenneCorrigee
             dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1608_7_8h_211124_111435';
             dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1608_7_8h_211124_111419';
-            
         else
             dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1608_7_8h_211118_102424_circ';
             dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1608_7_8h_211118_101340_circ';
@@ -20,24 +25,16 @@ switch bateau
         ship_AIS_MLB='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_MLB_1608_7_9h.mat';
         
     case 'Nacc'
-%         NACC QUEBEC Cargo
         if ~AntenneCorrigee
             dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_508_6_7h_211118_090133_circ';
             dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_508_6_7h_211117_164951_circ';
-        else
-            %     dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_508_6_7h_211117_162726';
-            
-            %     dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_508_6_7h_211117_162712';
-            %             dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_508_6_7h_211122_123930';
-            %             dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_508_6_7h_211122_123413';
-            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_508_6_7h_211124_105135';
+        else           dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_508_6_7h_211124_105135';
             dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_508_6_7h_211124_105157';
         end
         ship_AIS_PRC='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat';
         ship_AIS_MLB='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_MLB_508_6_9h.mat';
         
     case 'TB'
-        % % Thunder Bay
         
         if AntenneCorrigee
             dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1408_22_24h_211118_122744';
@@ -64,14 +61,14 @@ switch bateau
     case 'ALICUDI'
                 
         if AntenneCorrigee
-            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1708_7_8h_f=[50_1800]_220202_153226.mat';
-            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1708_7_8h_f=[50_1800]_220202_152828.mat';
+            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1708_7_8h_f=[50_300]_220316_101902.mat';
+            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1708_7_8h_f=[50_300]_220315_113426.mat';
         else
             dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_1708_7_8h_f=[50_1800]_220202_152838_circ.mat';
             dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1708_7_8h_f=[50_1800]_220202_153158_circ.mat';
         end
-        ship_AIS_PRC='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_PRC_1708_7_8h.mat';
-        ship_AIS_MLB='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_MLB_1708_7_8h.mat';      
+        ship_AIS_PRC='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_PRC_1708_7_9h.mat';
+        ship_AIS_MLB='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCALICUDI_MLB_1708_7_9h.mat';      
        
 end
 

@@ -58,31 +58,33 @@ switch site
         folderIn = ['F:\Bring_Dep_2\' site '_wav\'];
         startID=1;
         thetaexcluded=[];
-        Z0=40.7; 
-         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat',...
+        Z0=40.7;
+        ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316023339_PRC_1408_22_24h',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\CORIOLIS_PRC_108_5_8h'};
-         timelim=[datenum(2021,08,16,8,5,0)*24*3600,datenum(2021,08,16,8,45,0)*24*3600;...
-             datenum(2021,08,5,7,0,0)*24*3600,datenum(2021,08,5,7,50,0)*24*3600;...
-             datenum(2021,08,14,22,04,0)*24*3600,datenum(2021,08,14,23,45,0)*24*3600;...
-             datenum(2021,08,1,5,45,0)*24*3600,datenum(2021,08,1,8,9,0)*24*3600];
+        timelim=[datenum(2021,08,16,8,5,0)*24*3600,datenum(2021,08,16,8,45,0)*24*3600;...
+            datenum(2021,08,5,7,0,0)*24*3600,datenum(2021,08,5,7,50,0)*24*3600;...
+            datenum(2021,08,14,22,04,0)*24*3600,datenum(2021,08,14,23,45,0)*24*3600;...
+            datenum(2021,08,1,5,45,0)*24*3600,datenum(2021,08,1,8,9,0)*24*3600];
+%         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat'};
+%         timelim=[datenum(2021,08,5,7,0,0)*24*3600,datenum(2021,08,5,7,40,0)*24*3600;];
 end
 
 Nboats=length(ship_AIS_file);
-filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\' site 'v5_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
+filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\'  site '_' datestr(now, 'yymmdd') '_v5_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
 
 BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTrack.mat'];
 
-load(BoatInfo);
+% load(BoatInfo);
 MinDist=400; % minimum distance for plane wave approx
 MaxDist=10e3; % maximum distance for clear signal
 
-if startID
-    angle(1:startID-1)=[];
-    time(1:startID-1)=[];
-    dist(1:startID-1)=[];
-end
+% if startID
+%     angle(1:startID-1)=[];
+%     time(1:startID-1)=[];
+%     dist(1:startID-1)=[];
+% end
 
 for n=1:Nboats
     load(ship_AIS_file{n})
@@ -120,6 +122,10 @@ line([0 length(angle_boats{n})],[MinDist MinDist],'Color','k')
 text(length(angle_boats{n})/2,MinDist+20,'Minimum distance')
 title(site)
 
+angle=[];
+time=[];
+dist=[];
+    
 for n=1:Nboats
     angle=[angle,angle_boats{n}'];
     time=[time;time_boats{n}'];
@@ -149,11 +155,13 @@ Nhydro=20;
 Nangles=length(angle);
 
 %% Calculate lag from channel 1
-lag=zeros(Nangles,Nhydro);
+lag3=zeros(Nangles,Nhydro);
 %     
 fe=10000;
 %%
+lag_max_h2h=3.5/c0;
 for iFile=1:Nangles
+    disp([num2str(iFile) '/' num2str(Nangles)])
     file_wav=fileList(iFile);
     [MAT_s,fe, tstart, dura] = readBring([folderIn fileList{iFile}], time(iFile),'duration',duraNs,'buffer',buffer,'power2',true);
     Npoints=length(MAT_s(:,1));
@@ -161,19 +169,25 @@ for iFile=1:Nangles
     for ii=1:Nhydro
         
         if ii>1
-            [r,lags] =xcorr(MAT_s(:,ii),MAT_s(:,ii-1));
-            lag(iFile,ii)=lags(r==max(r))/fe;
-            lag(iFile,ii)=lags(r==max(r))/fe+lag(iFile,ii-1);
+            if ~isnan(lag3(iFile,ii-1))
+                [r,lags] =xcorr(MAT_s(:,ii),MAT_s(:,ii-1));
+                lagh2h=lags(r==max(r))/fe;
+                if abs(lagh2h)<lag_max_h2h
+                    lag3(iFile,ii)=lagh2h+lag3(iFile,ii-1);
+                else lag3(iFile,ii)=nan;
+                end
+            else lag3(iFile,ii)=nan;
+            end
         else
             %                 [r,lags] =xcorr(MAT_s(:,ii),MAT_s(:,Nhydro));
             %                 lag(iFile,ii)=lags(r==max(r))/fe;
-            lag(iFile,ii)=0;
+            lag3(iFile,ii)=0;
         end
     end
 %             figure, plot(lags,r); title('fonction de corrélation')
 %             figure, plot(MAT_s(:,ii)); hold on, plot(MAT_s(:,1));legend('S1',['S' num2str(ii)])
     
-    %     figure, plot(sigi); hold on, plot(sig1)
+%         figure, plot(sigi); hold on, plot(sig1)
 end
 
 %%
@@ -181,20 +195,21 @@ clear MAT_s lags r
 save(filename);
 %%
 
-Dmax=22;
-lagmax=Dmax/c0; % correspond à un diamètre max de 22m
+% Dmax=22;
+% lagmax=Dmax/c0; % correspond à un diamètre max de 22m
+% 
+% 
+% falselags=abs(lag)>lagmax;
+% 
+% lag_clean=lag;
+% lag_clean(falselags)=NaN;
+% 
+% L=zeros(Nangles,1);
+% for it=1:Nangles
+%     L(it)=mean(lag_clean(it,~isnan(lag_clean(it,:))));
+% end
 
-
-falselags=abs(lag)>lagmax;
-
-lag_clean=lag;
-lag_clean(falselags)=NaN;
-
-L=zeros(Nangles,1);
-for it=1:Nangles
-    L(it)=mean(lag_clean(it,~isnan(lag_clean(it,:))));
-end
-
+lag_clean=lag3;
 
 %%
 X=zeros(1,Nhydro);
@@ -207,34 +222,38 @@ if video
 end
 Zlim=1; % Z=Z1+/- Zlim
 figure,
-%
+%%
 for ii=1:20
+    %%
     hold off
-%     plot(angle,lag(:,ii),'x');ylim([-lagmax lagmax]*2)
-%     hold on, plot(angle,lag_clean(:,ii),'x');
+    %     plot(angle,lag(:,ii),'x');ylim([-lagmax lagmax]*2)
+    %     hold on, plot(angle,lag_clean(:,ii),'x');
     
-toto=lag_clean(:,ii);
-angleii=angle(~isnan(toto));
-toto=toto(~isnan(toto));
-distii=dist(~isnan(toto));
+    toto=lag_clean(:,ii);
+    angleii=angle(~isnan(toto));
+    toto=toto(~isnan(toto));
+    distii=dist(~isnan(toto));
+    
+    SineFunction=fittype(@(A,B,C,distance,theta) -A*sind(theta)-B*cosd(theta)-C./distance,'dependent',{'toto'},'problem','distance',...
+        'coefficients',{'A','B','C'},'independent',{'theta'});
+    [myfit, goodness, output] = fit(angleii',toto,SineFunction ,'problem', distii','StartPoint',[0,0,0],'robust','Bisquare','Lower',[-Inf -Inf -Zlim*Z0/(c0)],'Upper',[Inf Inf Zlim*Z0/(c0)] );
 
-SineFunction=fittype(@(A,B,C,distance,theta) -A*sind(theta)-B*cosd(theta)-C./distance,'dependent',{'toto'},'problem','distance',...
-    'coefficients',{'A','B','C'},'independent',{'theta'});
-[myfit, goodness, output] = fit(angleii',toto,SineFunction ,'problem', distii','StartPoint',[0,0,0],'robust','on','Lower',[-Inf -Inf -Zlim*Z0/(c0)],'Upper',[Inf Inf Zlim*Z0/(c0)] );
-% plot(myfit,angleii,toto); title(['A=' num2str(myfit.A,3) ' B=' num2str(myfit.B,3) ' C=' num2str(myfit.C,3)]) 
+    fitCoeffs = num2cell(coeffvalues(myfit));
+     plot(sort(angleii),-fitCoeffs{1}*sind(sort(angleii))-fitCoeffs{2}*cosd(sort(angleii))-fitCoeffs{3}./distii)
+hold on, plot(angleii,toto,'x')
 
-% SineFunction=fittype('-A*sind(theta)-B*cosd(theta)-C','dependent',{'toto'},'independent',{'theta'},'coefficients',{'A','B','C'});
-% [myfit, goodness, output] = fit(angleii',toto,SineFunction ,'StartPoint',[0,0,0],'robust','on','Lower',[-Inf -Inf -Zlim/(c0*R0/Z0)],'Upper',[Inf Inf Zlim/(c0*R0/Z0)] );
-% plot(myfit,angleii,toto); title(['A=' num2str(myfit.A,3) ' B=' num2str(myfit.B,3) ' C=' num2str(myfit.C,3)]) 
-
-
-if video
-    frame=getframe(gcf) ;
-    writeVideo(writerObj, frame);
-end
-X(ii)=myfit.A*c0;
-Y(ii)=myfit.B*c0;
-Z(ii)=-myfit.C*c0/Z0;
+%     SineFunction=fittype('-A*sind(theta)-B*cosd(theta)-C','dependent',{'toto'},'independent',{'theta'},'coefficients',{'A','B','C'});
+%     [myfit, goodness, output] = fit(angleii',toto,SineFunction ,'StartPoint',[0,0,0],'robust','on','Lower',[-Inf -Inf -Zlim/(c0*R0/Z0)],'Upper',[Inf Inf Zlim/(c0*R0/Z0)] );
+%     plot(myfit,angleii,toto); title(['A=' num2str(myfit.A,3) ' B=' num2str(myfit.B,3) ' C=' num2str(myfit.C,3)])
+   
+    
+    if video
+        frame=getframe(gcf) ;
+        writeVideo(writerObj, frame);
+    end
+    X(ii)=myfit.A*c0;
+    Y(ii)=myfit.B*c0;
+    Z(ii)=-myfit.C*c0/Z0;
 
 end
 %%
@@ -252,10 +271,10 @@ end
 Dx=max(X)-min(X);
 Dy=max(Y)-min(Y);
 Dz=max(Z)-min(Z);
-title([site ' v4 c_0=' num2str(c0) 'm/s D_x=' num2str(Dx,3) 'm D_y=' num2str(Dy,3) 'm'])
+title([site ' v5 c_0=' num2str(c0) 'm/s D_x=' num2str(Dx,3) 'm D_y=' num2str(Dy,3) 'm'])
 %
 save(filename,'X','Y','Z','lag_clean','-append');
-%
+%%
 X0=mean(X); Y0=mean(Y);Z1=mean(Z);
 perim_th=2*pi*9.8;
 perimetre=sum(sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2));
@@ -272,8 +291,7 @@ subplot(122), plot(R); ylim([0 max(R)+1])
 title({[' Périmètre:' num2str(perimetre,2) 'm']; [' Périmètre théorique:' num2str(perim_th,2) 'm']})
 ylabel('Rayon (m)')
 xlabel('Hydrophone #')
-%%
-saveas(gcf,[filename '.fig']);saveas(gcf,[filename '.png']);
+
 
 %%
 
@@ -284,7 +302,7 @@ Dy=max(Y)-min(Y);
 Dz=max(Z)-min(Z);
 perim_th=2*pi*9.8;
 perimetre=sum(sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2));
-
+disth2h=sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2);
 figure, 
 subplot(121),
 
@@ -306,3 +324,4 @@ title({[' Périmètre:' num2str(perimetre,2) 'm']; [' Périmètre théorique:' num2st
 xlabel('x (m)'), 
 ylabel('y (m)'), 
 zlabel('z (m)'), 
+saveas(gcf,[filename '.fig']);saveas(gcf,[filename '.png']);
