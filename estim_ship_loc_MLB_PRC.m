@@ -1,18 +1,19 @@
 clear 
-AntenneCorrigee=1;
+AntenneCorrigee=0;
 bateau='SAMUELRISLEY';
 switch bateau
     case 'SAMUELRISLEY'
         if AntenneCorrigee
-            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_3107_22_23h_f=[50_300]_220330_164232';
-            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_3107_22_23h_f=[50_300]_220330_153617';
+            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_3107_22_23h_f=[20_1800]_220331_144958';
+            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_3107_22_23h_f=[20_1800]_220331_144930';
         else
-            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_3107_22_23h_f=[50_300]_220330_153510_circ';
-            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_3107_22_23h_f=[50_300]_220330_153437_circ';
+            dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_3107_22_23h_f=[20_1800]_220331_145351_circ';
+            dataPRC='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\PRC_3107_22_23h_f=[20_1800]_220331_145419_circ';
         end
         ship_AIS_PRC='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SAMUELRISLEY_PRC_3107_22_24h.mat';
         ship_AIS_MLB='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SAMUELRISLEY_MLB_3107_22_24h.mat';
-        
+        t0= datenum(2021,7,31,22,25,0);
+        tend= datenum(2021,7,31,23,5,0);
     case 'JJ'
         if AntenneCorrigee
             dataMLB='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\MLB_1608_7_8h_211124_111435';
@@ -146,11 +147,15 @@ y_ais_select=interp1(vec_temps_ship/(24*3600),y_ship_km,datenum(ptime));
 delta=sqrt((x_ais_select-x_ship).^2+(y_ais_select-y_ship).^2);
 figure, plot(ptime,delta,'kx'); 
 delta(delta==Inf)=[];
-rmse=sqrt(mean(delta(~isnan(delta)).^2));
-mean_error=mean(delta(~isnan(delta)));
-hold on, plot([ptime(1) ptime(end)],[rmse rmse],'r-')
+
+t_select=find(datenum(ptime)>datenum(t0) & datenum(ptime)<datenum(tend));
+
+delta_select=delta(t_select);
+rmse=sqrt(mean(delta_select(~isnan(delta_select)).^2));
+mean_error=mean(delta_select(~isnan(delta_select)));
+hold on, plot([t0 tend],[rmse rmse],'r-')
 text(datenum(ptime(round(end/2))), rmse*1.2,['RMSE=' num2str(rmse,3) 'km'],'Color','r')
-hold on, plot([ptime(1) ptime(end)],[mean_error mean_error],'b-')
+hold on, plot([t0 tend],[mean_error mean_error],'b-')
 text(datenum(ptime(round(end/2))), mean_error*1.2,['Mean error=' num2str(mean_error,3) 'km'],'Color','b')
 if AntenneCorrigee
     title({'Error Bring / AIS position (km)', 'Corrected Array'})

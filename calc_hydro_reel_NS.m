@@ -5,7 +5,7 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 
-site='MLB';
+site='PRC-';
 video=0;
 % method=1; %0: supress angles when 1 hydro is overlagged. 1: suppress only overlags.
 
@@ -49,13 +49,13 @@ switch site
 end
 
 Nboats=length(ship_AIS_file);
-filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\'  site '_' datestr(now, 'yymmdd') '_NS_c0=' num2str(c0) '_' num2str(Nboats) '_boats' ];
+filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\'  site '_' datestr(now, 'yymmdd') '_NS_20km_c0=' num2str(c0) '_' num2str(Nboats) '_boats' ];
 
 BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTrack.mat'];
 
 % load(BoatInfo);
 MinDist=400; % minimum distance for plane wave approx
-MaxDist=10e3; % maximum distance for clear signal
+MaxDist=20e3; % maximum distance for clear signal
 
 % if startID
 %     angle(1:startID-1)=[];

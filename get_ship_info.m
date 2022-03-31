@@ -237,14 +237,14 @@ switch bateau
                 ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SAMUELRISLEY_PRC_3107_22_24h.mat';
                 load(ship_AIS_file);
                 heure=22;
-                minute=30;
-                duree=60*35;
+                minute=25;
+                duree=60*55;
             case 'MLB'
                 ship_AIS_file='C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\SAMUELRISLEY_MLB_3107_22_24h.mat';
                 load(ship_AIS_file);
                heure=22;
-                minute=30;
-                duree=60*35;
+                minute=25;
+                duree=60*55;
         end
     case 'GLORYRIVER'  
         switch arrID
