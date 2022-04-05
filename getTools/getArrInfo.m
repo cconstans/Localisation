@@ -8,32 +8,23 @@ function [loc, ai ]= getArrInfo(hID,AntenneCorrigee)
 switch lower(hID)
     case 'aav'
         hydrofile='Data loc\AAVv5_c0=1480 3_boats.mat';
+        hydrofile='Data loc\AAV_220405_v5_c0=1480 7_boats.mat';
         ai.loc = [49.0907 -64.5372];
-        ai.offSet = -23;
-        ai.arrOri = 'clock';
-        ai.azimutMax = [-90, 90];
         
     case 'mlb'
 %         hydrofile='Data loc\MLBv5_c0=1480 4_boats.mat';
 %         hydrofile='Data loc\MLB_220330_NS_c0=1480_5_boats.mat';
         hydrofile='Data loc\MLB_220331_NS_20km_c0=1480_5_boats';
         ai.loc = [48.6039 -64.1863];
-        ai.offSet = -78;
-        ai.arrOri = 'clock';
-        ai.azimutMax = [0, 180];
     case 'prc'
 %         hydrofile='Data loc\PRCv5_c0=1480 4_boats.mat';
 %         hydrofile='Data loc\PRC_220330_NS_c0=1480_6_boats';
         hydrofile='Data loc\PRC_220331_NS_20km_c0=1480_6_boats';
         ai.loc= [48.5311 -64.1983];
-        ai.offSet = 135;
-        ai.arrOri = 'clock';
-        ai.azimutMax = [0, 180];
     case 'cld'
-        hydrofile='Data loc\CLDv5_c0=1480 3_boats.mat';
+%         hydrofile='Data loc\CLDv5_c0=1480 3_boats.mat';
+        hydrofile='Data loc\CLD_220405_v5_c0=1480 8_boats.mat';
         ai.loc = [49.1933  -64.8315];
-        ai.offSet = 97;
-        ai.arrOri = 'counter';        ai.azimutMax = [-60, 120];
     otherwise
         error(['Can''t location. AV = Anse-a-Valleau, CD = Cloridorme, MB = Malbay, PC = Perce.' ])
 end

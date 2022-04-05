@@ -222,7 +222,7 @@ daspect([1 1 1])
 for ii=1:Nhydro
     hold on;
     p2=plot(X(ii),Y(ii),'rx');
-    text(X(ii)+0.2,Y(ii),num2str(ii))
+    text(X(ii)+0.2,Y(ii),num2str(ii),'color','r')
 end
 
 Dx=max(X)-min(X);

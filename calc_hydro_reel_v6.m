@@ -5,28 +5,30 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 
-site='PRC';
+site='AAV';
 video=0;
 % method=1; %0: supress angles when 1 hydro is overlagged. 1: suppress only overlags.
 
 typeHL='LF';
 c0=1480;
-origin=10;
+% origin=10;
 
 switch site
     case 'AAV'
-        folderIn = ['D:/Bring_Dep_1_Wav/' site '/' typeHL '/']; % Local Mac folder
+        folderIn = ['G:/Bring_Dep_1_Wav/' site '/' typeHL '/']; % Local Mac folder
         startID=83; % take points from startID
         thetaexcluded=[];
         Z0=39.1;
-        ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_1807_10_13h.mat',...
-            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_AAV_1907_2_4h',...
-            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_AAV_1907_10_12h'};
-%             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BEVERLYMI_AAV_2307_0_24h'};
-        timelim=[datenum(2021,07,18,11,45,0)*24*3600,datenum(2021,07,18,12,35,0)*24*3600;...
-           datenum(2021,07,19,2,15,0)*24*3600,datenum(2021,07,19,3,15,0)*24*3600 ;...
-            datenum(2021,07,19,10,25,0)*24*3600,datenum(2021,07,19,10,40,0)*24*3600];
-%             datenum(2021,07,23,5,55,0)*24*3600,datenum(2021,07,23,6,20,0)*24*3600];
+%         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_2107_5_7h.mat',...
+           ship_AIS_file={ 'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_AAV_1907_2_4h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_AAV_1907_10_12h',...
+             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_1807_10_13h',...
+             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\GOLDENICE_AAV_1607_2_4h.mat'};
+          timelim=[ datenum(2021,07,19,2,15,0)*24*3600,datenum(2021,07,19,3,15,0)*24*3600 ;...
+%             datenum(2021,07,19,14,55,0)*24*3600,datenum(2021,07,19,15,13,0)*24*3600;...
+            datenum(2021,07,19,10,10,0)*24*3600,datenum(2021,07,19,10,50,0)*24*3600;...
+            datenum(2021,07,18,11,45,0)*24*3600,datenum(2021,07,18,12,45,0)*24*3600;...
+            datenum(2021,07,16,2,55,0)*24*3600,datenum(2021,07,16,4,30,0)*24*3600];
 
     case 'CLD'
         folderIn = ['D:/Bring_Dep_1_Wav/' site '/' typeHL '/'];
@@ -73,7 +75,7 @@ switch site
 end
 
 Nboats=length(ship_AIS_file);
-filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\'  site '_' datestr(now, 'yymmdd') '_v7_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
+filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\'  site '_' datestr(now, 'yymmdd') '_v6_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
 
 BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTrack.mat'];
 
@@ -111,17 +113,17 @@ for n=1:Nboats
 end
 
 
-figure,
-for n=1:Nboats
-    plot(angle_boats{n});
-    hold on, plot(dist_boats{n});
-    hold on
-end
-legend('angle1 (°)','distance1 (m)','angle2 (°)','distance2 (m)','angle3 (°)','distance3 (m)','angle4 (°)','distance4 (m)')
-xlabel('#mesure')
-line([0 length(angle_boats{n})],[MinDist MinDist],'Color','k')
-text(length(angle_boats{n})/2,MinDist+20,'Minimum distance')
-title(site)
+% figure,
+% for n=1:Nboats
+%     plot(angle_boats{n});
+%     hold on, plot(dist_boats{n});
+%     hold on
+% end
+% legend('angle1 (°)','distance1 (m)','angle2 (°)','distance2 (m)','angle3 (°)','distance3 (m)','angle4 (°)','distance4 (m)')
+% xlabel('#mesure')
+% line([0 length(angle_boats{n})],[MinDist MinDist],'Color','k')
+% text(length(angle_boats{n})/2,MinDist+20,'Minimum distance')
+% title(site)
 
 angle=[];
 time=[];
@@ -161,7 +163,7 @@ lag3=zeros(Nangles,Nhydro);
 fe=10000;
 %%
 % order=circshift((1:20)',origin);
-order=fliplr(1:20);
+order=1:20;
 lag_max_h2h=3.5/c0;
 for iFile=1:Nangles
     disp([num2str(iFile) '/' num2str(Nangles)])
@@ -279,22 +281,22 @@ title([site ' v6 c_0=' num2str(c0) 'm/s D_x=' num2str(Dx,3) 'm D_y=' num2str(Dy,
 %
 save(filename,'X','Y','Z','lag_clean','-append');
 %%
-X0=mean(X); Y0=mean(Y);Z1=mean(Z);
-perim_th=2*pi*9.8;
-perimetre=sum(sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2));
-figure, 
-subplot(121),plot3([X X(1)]-X0,[Y Y(1)]-Y0,[Z Z(1)]-Z1)
-hold on, plot3(0,0,0,'rx')
-daspect([1 1 1])
-title({[site ' c_0=' num2str(c0) 'm/s'];[ 'D_x=' num2str(Dx,3) 'm D_y=' num2str(Dy,3) 'm \delta_z=' num2str(Dz,3) 'm']})
-xlabel('x (m)'), 
-ylabel('y (m)'), 
-zlabel('z (m)'), 
-R=sqrt((X-X0).^2+(Y-Y0).^2+(Z-Z1).^2);
-subplot(122), plot(R); ylim([0 max(R)+1])
-title({[' Périmètre:' num2str(perimetre,2) 'm']; [' Périmètre théorique:' num2str(perim_th,2) 'm']})
-ylabel('Rayon (m)')
-xlabel('Hydrophone #')
+% X0=mean(X); Y0=mean(Y);Z1=mean(Z);
+% perim_th=2*pi*9.8;
+% perimetre=sum(sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2));
+% figure, 
+% subplot(121),plot3([X X(1)]-X0,[Y Y(1)]-Y0,[Z Z(1)]-Z1)
+% hold on, plot3(0,0,0,'rx')
+% daspect([1 1 1])
+% title({[site ' c_0=' num2str(c0) 'm/s'];[ 'D_x=' num2str(Dx,3) 'm D_y=' num2str(Dy,3) 'm \delta_z=' num2str(Dz,3) 'm']})
+% xlabel('x (m)'), 
+% ylabel('y (m)'), 
+% zlabel('z (m)'), 
+% R=sqrt((X-X0).^2+(Y-Y0).^2+(Z-Z1).^2);
+% subplot(122), plot(R); ylim([0 max(R)+1])
+% title({[' Périmètre:' num2str(perimetre,2) 'm']; [' Périmètre théorique:' num2str(perim_th,2) 'm']})
+% ylabel('Rayon (m)')
+% xlabel('Hydrophone #')
 
 
 %%

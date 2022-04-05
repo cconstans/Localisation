@@ -7,10 +7,10 @@ addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 openData = false;
 % Path information : folderIn = wav folder / folderOut = figure output folder
 typeHL = 'LF';
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 DataSave=1;
-bateau='SAMUELRISLEY';
-arrID='PRC';
+bateau='MSCANGELA';
+arrID='AAV';
 
 % Spectro parameter
 fmin = 20;
@@ -22,7 +22,7 @@ fmax = 1800;
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
 Ns = 2^16;              % Total number of sample
-laps=60;
+laps=150;
 Ntime=duree/laps;
 clear ptime
 ptime(1)=datetime(2021,mois,jour,heure,minute,0);
