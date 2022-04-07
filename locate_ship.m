@@ -10,7 +10,7 @@ typeHL = 'LF';
 AntenneCorrigee=1;
 DataSave=1;
 bateau='MSCANGELA';
-arrID='AAV';
+arrID='CLD';
 
 % Spectro parameter
 fmin = 20;
@@ -22,7 +22,7 @@ fmax = 1800;
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
 Ns = 2^16;              % Total number of sample
-laps=150;
+laps=120;
 Ntime=duree/laps;
 clear ptime
 ptime(1)=datetime(2021,mois,jour,heure,minute,0);

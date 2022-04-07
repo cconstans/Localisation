@@ -7,8 +7,8 @@ function [loc, ai ]= getArrInfo(hID,AntenneCorrigee)
 
 switch lower(hID)
     case 'aav'
-        hydrofile='Data loc\AAVv5_c0=1480 3_boats.mat';
-        hydrofile='Data loc\AAV_220405_v5_c0=1480 7_boats.mat';
+%         hydrofile='Data loc\AAVv5_c0=1480 3_boats.mat';
+        hydrofile='Data loc\AAV_220406_v5_c0=1480 6_boats.mat';
         ai.loc = [49.0907 -64.5372];
         
     case 'mlb'
@@ -23,7 +23,7 @@ switch lower(hID)
         ai.loc= [48.5311 -64.1983];
     case 'cld'
 %         hydrofile='Data loc\CLDv5_c0=1480 3_boats.mat';
-        hydrofile='Data loc\CLD_220405_v5_c0=1480 8_boats.mat';
+        hydrofile='Data loc\CLD_220406_v5_c0=1480 7_boats';
         ai.loc = [49.1933  -64.8315];
     otherwise
         error(['Can''t location. AV = Anse-a-Valleau, CD = Cloridorme, MB = Malbay, PC = Perce.' ])
