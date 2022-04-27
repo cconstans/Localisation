@@ -5,7 +5,7 @@
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 
-site='AAV';
+site='CLD';
 video=0;
 
 typeHL='LF';
@@ -114,10 +114,12 @@ for n=1:Nboats
     dist_boats{n}=distn;
     time_boats{n}=timen;
     size_per_boat(n)=length(anglen);
-%     size(anglen)
+    size(anglen)
 %     figure, plot(anglen); 
-%     max(distn)
-%     min(distn)
+    max(distn)
+    min(distn)
+    anglen(end)
+    anglen(1)-360
 end
 
  idx_boats=cumsum([1 size_per_boat(1:end-1)]);
