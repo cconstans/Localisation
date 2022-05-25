@@ -1,21 +1,27 @@
-% Using all angles to compute matrix
-% add opportunity boats
-%% Spectro
-% config='case_BB_WENZ_RSB_-20dB';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Calcul des positions des hydrophones (AAV, CLD, MLB ou PRC) en fonction
+% des données AIS de bateaux d'opportunités selectionnés pour leur fort
+% signal, comparées aux signaux enregistrés sur leur période de passage.
+
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
+%% Paramètres
 
-site='CLD';
+site='PRC';
 video=0;
-
 typeHL='LF';
 c0=1480;
+MinDist=400; % minimum distance for plane wave approx
+MaxDist=60e3; % maximum distance for clear signal
+Zlim=1; % Z=Z1+/- Zlim
 
+%%
 switch site
     case 'AAV'
-        folderIn = ['G:/Bring_Dep_1_Wav/' site '/' typeHL '/']; % Local Mac folder
-        startID=83; % take points from startID
-        thetaexcluded=[];
+        folderIn = ['G:/Bring_Dep_1_Wav/' site '/' typeHL '/'];
         Z0=39.1;
         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_1807_10_13h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_AAV_1907_2_4h',...
@@ -24,25 +30,22 @@ switch site
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\STARAYESHA_AAV_2207_22_25h',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_AAV_1907_10_12h'};
         timelim=[datenum(2021,07,18,11,45,0)*24*3600,datenum(2021,07,18,12,45,0)*24*3600;...
-           datenum(2021,07,19,2,20,0)*24*3600,datenum(2021,07,19,3,15,0)*24*3600 ;...
-           datenum(2021,07,21,15,0,0)*24*3600,datenum(2021,07,21,16,0,0)*24*3600 ;...
-           datenum(2021,07,21,20,20,0)*24*3600,datenum(2021,07,21,21,50,0)*24*3600 ;...
-           datenum(2021,07,22,22,16,0)*24*3600,datenum(2021,07,23,0,35,0)*24*3600 ;...
+            datenum(2021,07,19,2,20,0)*24*3600,datenum(2021,07,19,3,15,0)*24*3600 ;...
+            datenum(2021,07,21,15,0,0)*24*3600,datenum(2021,07,21,16,0,0)*24*3600 ;...
+            datenum(2021,07,21,20,20,0)*24*3600,datenum(2021,07,21,21,50,0)*24*3600 ;...
+            datenum(2021,07,22,22,16,0)*24*3600,datenum(2021,07,23,0,35,0)*24*3600 ;...
             datenum(2021,07,19,10,25,0)*24*3600,datenum(2021,07,19,10,50,0)*24*3600];
-
+        
     case 'CLD'
         folderIn = ['G:/Bring_Dep_1_Wav/' site '/' typeHL '/'];
-        startID=1;
-        thetaexcluded=[];
         Z0=43.6;
-       ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_CLD_1807_10_12h.mat',...
+        ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_CLD_1807_10_12h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_CLD_1907_0_3h',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MARJORIEK_CLD_1907_10_13h',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\HELENAG_CLD_2107_13_15h',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\HLSINES_CLD_2107_18_20h',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MAERSKPATRAS_CLD_2307_23_26h',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\STARBORNEO_CLD_2407_12_15h'};
-%             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\KSLSANFRANCISCO_CLD_1407_3_7h.mat'};
         timelim=[datenum(2021,07,18,10,20,0)*24*3600,datenum(2021,07,18,11,20,0)*24*3600;...
             datenum(2021,07,19,1,17,0)*24*3600,datenum(2021,07,19,2,07,0)*24*3600 ;...
             datenum(2021,07,19,11,30,0)*24*3600,datenum(2021,07,19,12,40,0)*24*3600;...
@@ -50,11 +53,8 @@ switch site
             datenum(2021,07,21,19,20,0)*24*3600,datenum(2021,07,21,20,30,0)*24*3600;...
             datenum(2021,07,23,23,30,0)*24*3600,datenum(2021,07,24,1,50,0)*24*3600;...
             datenum(2021,07,24,12,50,0)*24*3600,datenum(2021,07,24,15,0,0)*24*3600];
-%             datenum(2021,07,14,3,50,0)*24*3600,datenum(2021,07,14,7,0,0)*24*3600];
     case 'MLB'
-        folderIn = ['F:\Bring_Dep_2\' site '_wav\'];
-        startID=1001;
-        thetaexcluded=[];
+        folderIn = ['G:\Bring_Dep_2\' site '_wav\'];
         Z0=37.1;
         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_MLB_1608_7_9h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_MLB_508_6_9h.mat',...
@@ -66,9 +66,7 @@ switch site
             datenum(2021,08,14,22,04,0)*24*3600,datenum(2021,08,14,23,45,0)*24*3600;...
             datenum(2021,08,1,5,45,0)*24*3600,datenum(2021,08,1,8,9,0)*24*3600];
     case 'PRC'
-        folderIn = ['F:\Bring_Dep_2\' site '_wav\'];
-        startID=1;
-        thetaexcluded=[];
+        folderIn = ['G:\Bring_Dep_2\' site '_wav\'];
         Z0=40.7;
         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat',...
@@ -78,24 +76,11 @@ switch site
             datenum(2021,08,5,7,0,0)*24*3600,datenum(2021,08,5,7,50,0)*24*3600;...
             datenum(2021,08,14,22,04,0)*24*3600,datenum(2021,08,14,23,45,0)*24*3600;...
             datenum(2021,08,1,5,45,0)*24*3600,datenum(2021,08,1,8,9,0)*24*3600];
-%         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat'};
-%         timelim=[datenum(2021,08,5,7,0,0)*24*3600,datenum(2021,08,5,7,40,0)*24*3600;];
 end
 
 Nboats=length(ship_AIS_file);
 filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\'  site '_' datestr(now, 'yymmdd') '_v5_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
 
-% BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTrack.mat'];
-
-% load(BoatInfo);
-MinDist=400; % minimum distance for plane wave approx
-MaxDist=60e3; % maximum distance for clear signal
-
-% if startID
-%     angle(1:startID-1)=[];
-%     time(1:startID-1)=[];
-%     dist(1:startID-1)=[];
-% end
 size_per_boat=zeros(1,Nboats);
 for n=1:Nboats
     load(ship_AIS_file{n})
@@ -103,7 +88,7 @@ for n=1:Nboats
     distn(vec_temps_ship<timelim(n,1) | vec_temps_ship>timelim(n,2))=[];
     anglen(vec_temps_ship<timelim(n,1) | vec_temps_ship>timelim(n,2))=[];
     timen=datetime(vec_temps_ship/(24*3600),'ConvertFrom','datenum');
-
+    
     timen(vec_temps_ship<timelim(n,1) | vec_temps_ship>timelim(n,2))=[];
     
     timen(distn<MinDist | distn>MaxDist)=[];
@@ -114,21 +99,14 @@ for n=1:Nboats
     dist_boats{n}=distn;
     time_boats{n}=timen;
     size_per_boat(n)=length(anglen);
-    size(anglen)
-%     figure, plot(anglen); 
-    max(distn)
-    min(distn)
-    anglen(end)
-    anglen(1)-360
 end
 
- idx_boats=cumsum([1 size_per_boat(1:end-1)]);
+idx_boats=cumsum([1 size_per_boat(1:end-1)]);
+
 figure,
 for n=1:Nboats
-%     plot(angle_boats{n});
     hold on, plot(dist_boats{n});
 end
-% legend('angle1 (°)','distance1 (m)','angle2 (°)','distance2 (m)','angle3 (°)','distance3 (m)','angle4 (°)','distance4 (m)')
 xlabel('#mesure')
 line([0 length(dist_boats{n})],[MinDist MinDist],'Color','k')
 text(length(dist_boats{n})/2,MinDist+20,'Minimum distance')
@@ -137,7 +115,7 @@ title(site)
 angle=[];
 time=[];
 dist=[];
-    
+
 for n=1:Nboats
     angle=[angle,angle_boats{n}'];
     time=[time;time_boats{n}'];
@@ -150,26 +128,19 @@ end
 % line([0 length(angle)],[MinDist MinDist],'Color','k')
 % text(length(angle)/2,MinDist+20,'Minimum distance')
 % title([site ': données exploitées'])
-% if ~isempty(thetaexcluded)
-%     
-%     idxrange= ~(angle<thetaexcluded(2) & angle>thetaexcluded(1));
-%     angle=angle(idxrange);
-%     time=time(idxrange);
+
 R0=mean(dist);
 
 [fileList, wavID] = getWavName(time, folderIn);
 duraNs=5;
-% Ns = 2^14;              % Total number of sample
 buffer = 2.5;             % Time in second to add before the ptime
 
 Nhydro=20;
-% theta=0:10:350;
 Nangles=length(angle);
 
 %% Calculate lag from channel 1
 lag=zeros(Nangles,Nhydro);
-%     
-fe=10000;
+%
 %%
 figure,
 lag_max_h2h=3.5/c0;
@@ -195,17 +166,12 @@ for iFile=1:Nangles
             lag(iFile,ii)=0;
         end
     end
-%     hold on, plot(angle(iFile),lag(iFile,2),'kx');drawnow; ylim([-lag_max_h2h;lag_max_h2h]); xlim([0 360 ]);
-%             figure, plot(lags,r); title('fonction de corrélation')
-%             figure, plot(MAT_s(:,ii)); hold on, plot(MAT_s(:,1));legend('S1',['S' num2str(ii)])
+    %     hold on, plot(angle(iFile),lag(iFile,2),'kx');drawnow; ylim([-lag_max_h2h;lag_max_h2h]); xlim([0 360 ]);
+    %             figure, plot(lags,r); title('fonction de corrélation')
+    %             figure, plot(MAT_s(:,ii)); hold on, plot(MAT_s(:,1));legend('S1',['S' num2str(ii)])
     
-%         figure, plot(sigi); hold on, plot(sig1)
+    %         figure, plot(sigi); hold on, plot(sig1)
 end
-
-%%
-% for iFile=910:1000
-%         hold on, plot(angle(iFile),lag(iFile,2),'gd');drawnow; ylim([-lag_max_h2h;lag_max_h2h]); xlim([0 360 ]);
-% end
 %%
 clear MAT_s lags r
 save(filename);
@@ -219,32 +185,21 @@ if video
     writerObj.FrameRate = 2;
     open(writerObj);
 end
-Zlim=1; % Z=Z1+/- Zlim
+
 figure,
 %%
 for ii=1:20
     %%
     hold off
-    %     plot(angle,lag(:,ii),'x');ylim([-lagmax lagmax]*2)
-    %     hold on, plot(angle,lag_clean(:,ii),'x');
-    
     toto=lag(:,ii);
     angleii=angle(~isnan(toto));
     toto=toto(~isnan(toto));
     distii=dist(~isnan(toto));
     
-%     SineFunction=fittype(@(A,B,C,distance,theta) -A*sind(theta)-B*cosd(theta)-C./distance,'dependent',{'toto'},'problem','distance',...
-%         'coefficients',{'A','B','C'},'independent',{'theta'});
-%     [myfit, goodness, output] = fit(angleii',toto,SineFunction ,'problem', distii','StartPoint',[0,0,0],'robust','Bisquare','Lower',[-Inf -Inf -Zlim*Z0/(c0)],'Upper',[Inf Inf Zlim*Z0/(c0)] );
-% 
-%     fitCoeffs = num2cell(coeffvalues(myfit));
-%      plot(sort(angleii),-fitCoeffs{1}*sind(sort(angleii))-fitCoeffs{2}*cosd(sort(angleii))-fitCoeffs{3}./distii)
-% hold on, plot(angleii,toto,'x')
-
     SineFunction=fittype('-A*sind(theta)-B*cosd(theta)-C','dependent',{'toto'},'independent',{'theta'},'coefficients',{'A','B','C'});
     [myfit, goodness, output] = fit(angleii',toto,SineFunction ,'StartPoint',[0,0,0],'robust','on','Lower',[-Inf -Inf -Zlim/(c0*R0/Z0)],'Upper',[Inf Inf Zlim/(c0*R0/Z0)] );
     plot(myfit,angleii,toto); title(['H' num2str(ii) ' A=' num2str(myfit.A,3) ' B=' num2str(myfit.B,3) ' C=' num2str(myfit.C,3)])
-   
+    
     
     if video
         frame=getframe(gcf) ;
@@ -253,7 +208,7 @@ for ii=1:20
     X(ii)=myfit.A*c0;
     Y(ii)=myfit.B*c0;
     Z(ii)=-myfit.C*c0/Z0;
-
+    
 end
 %%
 if video close(writerObj);end
@@ -277,20 +232,19 @@ save(filename,'X','Y','Z','lag','-append');
 % X0=mean(X); Y0=mean(Y);Z1=mean(Z);
 % perim_th=2*pi*9.8;
 % perimetre=sum(sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2));
-% figure, 
+% figure,
 % subplot(121),plot3([X X(1)]-X0,[Y Y(1)]-Y0,[Z Z(1)]-Z1)
 % hold on, plot3(0,0,0,'rx')
 % daspect([1 1 1])
 % title({[site ' c_0=' num2str(c0) 'm/s'];[ 'D_x=' num2str(Dx,3) 'm D_y=' num2str(Dy,3) 'm \delta_z=' num2str(Dz,3) 'm']})
-% xlabel('x (m)'), 
-% ylabel('y (m)'), 
-% zlabel('z (m)'), 
+% xlabel('x (m)'),
+% ylabel('y (m)'),
+% zlabel('z (m)'),
 % R=sqrt((X-X0).^2+(Y-Y0).^2+(Z-Z1).^2);
 % subplot(122), plot(R); ylim([0 max(R)+1])
 % title({[' Périmètre:' num2str(perimetre,2) 'm']; [' Périmètre théorique:' num2str(perim_th,2) 'm']})
 % ylabel('Rayon (m)')
 % xlabel('Hydrophone #')
-
 
 %%
 
@@ -302,7 +256,7 @@ Dz=max(Z)-min(Z);
 perim_th=2*pi*9.8;
 perimetre=sum(sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2));
 disth2h=sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2);
-figure, 
+figure,
 subplot(121),
 
 for ii=1:Nhydro
@@ -312,15 +266,15 @@ for ii=1:Nhydro
 end
 daspect([1 1 1])
 title({[site ' c_0=' num2str(c0) 'm/s'];[ 'D_x=' num2str(Dx,3) 'm D_y=' num2str(Dy,3) 'm \delta_z=' num2str(Dz,3) 'm']})
-xlabel('x (m)'), 
-ylabel('y (m)'), 
+xlabel('x (m)'),
+ylabel('y (m)'),
 R=sqrt((X-X0).^2+(Y-Y0).^2+(Z-Z1).^2);
 subplot(122),plot3([X X(1)]-X0,[Y Y(1)]-Y0,[Z Z(1)]-Z1)
 daspect([1 1 1])
 hold on, plot3(0,0,0,'rx')
 
 title({[' Périmètre:' num2str(perimetre,2) 'm']; [' Périmètre théorique:' num2str(perim_th,2) 'm']})
-xlabel('x (m)'), 
-ylabel('y (m)'), 
-zlabel('z (m)'), 
+xlabel('x (m)'),
+ylabel('y (m)'),
+zlabel('z (m)'),
 saveas(gcf,[filename '.fig']);saveas(gcf,[filename '.png']);

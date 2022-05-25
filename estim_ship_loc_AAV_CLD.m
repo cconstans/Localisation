@@ -1,18 +1,25 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A partir des résultats de beamforming des 2 sites AAV et CLD pour un même
+% bateau, donnant chacun une direction par rapport au site, calcul de la position du bateau.
+
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
 AntenneCorrigee=1;
 bateau='MSCANGELA';
 switch bateau
-%     case 'BLUEALEXANDRA'
-%         if AntenneCorrigee
-%             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_11_14h_f=[50_1500]_211208_164421';
-%             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_11_14h_f=[50_1500]_211208_164443';
-%         else
-%             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_11_14h_f=[50_1500]_211210_114729_circ';
-%             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_11_14h_f=[50_1500]_211210_114716_circ';
-%         end
-%         ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_CLD_2107_11_14h.mat'];
-%         ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_AAV_2107_11_14h.mat'];
+    case 'BLUEALEXANDRA'
+        if AntenneCorrigee
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_11_14h_f=[50_1500]_211208_164421';
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_11_14h_f=[50_1500]_211208_164443';
+        else
+            dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2107_11_14h_f=[50_1500]_211210_114729_circ';
+            dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2107_11_14h_f=[50_1500]_211210_114716_circ';
+        end
+        ship_AIS_CLD=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_CLD_2107_11_14h.mat'];
+        ship_AIS_AAV=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BLUEALEXANDRA_AAV_2107_11_14h.mat'];
 %         
     case 'LAKEONTARIO'
         if AntenneCorrigee
@@ -27,8 +34,6 @@ switch bateau
 %        %       
     case 'MSCANGELA'
         if AntenneCorrigee
-%             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2007_2_5h_f=[20_1800]_220203_120509';
-%             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2007_2_5h_f=[20_1800]_220203_120459';
             dataAAV='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\AAV_2007_2_5h_f=[20_1800]_220406_171418';
             dataCLD='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\CLD_2007_2_5h_f=[20_1800]_220406_171429';
         else

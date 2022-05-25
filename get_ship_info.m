@@ -6,7 +6,6 @@ switch bateau
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\OCEANECHOII_' arrID '_1307_21_24h'];
         load(ship_AIS_file);
     case 'LAKEONTARIO'
-%         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\LAKEONTARIO_' arrID '_1507_9_11h'];
         ship_AIS_file=['C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\LAKEONTARIO_' arrID '_1507_7_9h'];
         load(ship_AIS_file);
  

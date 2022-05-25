@@ -1,21 +1,23 @@
-% Using all angles to compute matrix
-% add opportunity boats
-%% Spectro
-% config='case_BB_WENZ_RSB_-20dB';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Calcul des positions des hydrophones PRC et MLB en fonction des données AIS de
+% bateaux d'opportunités selectionnés sur un axe Nord-Sud, comparées aux
+% signaux enregistrés sur leur période de passage.
+
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
+%% Paramètres
 
-site='PRC-';
+site='PRC';
 video=0;
-% method=1; %0: supress angles when 1 hydro is overlagged. 1: suppress only overlags.
-
 typeHL='LF';
 c0=1480;
-
-folderIn = ['H:\Bring_Dep_2\' site '_wav\'];
-startID=1;
-thetaexcluded=[];
-Z0=40.7;
+Z0=40.7; % depth
+MinDist=400; % minimum distance for plane wave approx
+MaxDist=20e3; % maximum distance for clear signal
+folderIn = ['G:\Bring_Dep_2\' site '_wav\'];
+%%
 switch site
     case 'PRC'
         ship_AIS_file={  'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat',...
@@ -45,23 +47,11 @@ switch site
             datenum(2021,08,5,0,10,0)*24*3600,datenum(2021,08,5,0,45,0)*24*3600;...
             datenum(2021,7,30,23,05,0)*24*3600,datenum(2021,7,31,0,0,0)*24*3600;...
             datenum(2021,08,17,7,25,0)*24*3600,datenum(2021,08,17,8,10,0)*24*3600;];
-        
 end
 
 Nboats=length(ship_AIS_file);
 filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\'  site '_' datestr(now, 'yymmdd') '_NS_20km_c0=' num2str(c0) '_' num2str(Nboats) '_boats' ];
 
-BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTrack.mat'];
-
-% load(BoatInfo);
-MinDist=400; % minimum distance for plane wave approx
-MaxDist=20e3; % maximum distance for clear signal
-
-% if startID
-%     angle(1:startID-1)=[];
-%     time(1:startID-1)=[];
-%     dist(1:startID-1)=[];
-% end
 
 for n=1:Nboats
     load(ship_AIS_file{n})
@@ -80,24 +70,19 @@ for n=1:Nboats
     dist_boats{n}=distn;
     time_boats{n}=timen;
     
-%     size(anglen)
-%     figure, plot(anglen); 
-%     max(distn)
-%     min(distn)
 end
 
-
-figure,
-for n=1:Nboats
-    plot(angle_boats{n});
-    hold on, plot(dist_boats{n});
-    hold on
-end
-legend('angle1 (°)','distance1 (m)','angle2 (°)','distance2 (m)','angle3 (°)','distance3 (m)','angle4 (°)','distance4 (m)')
-xlabel('#mesure')
-line([0 length(angle_boats{n})],[MinDist MinDist],'Color','k')
-text(length(angle_boats{n})/2,MinDist+20,'Minimum distance')
-title(site)
+% figure,
+% for n=1:Nboats
+%     plot(angle_boats{n});
+%     hold on, plot(dist_boats{n});
+%     hold on
+% end
+% legend('angle1 (°)','distance1 (m)','angle2 (°)','distance2 (m)','angle3 (°)','distance3 (m)','angle4 (°)','distance4 (m)')
+% xlabel('#mesure')
+% line([0 length(angle_boats{n})],[MinDist MinDist],'Color','k')
+% text(length(angle_boats{n})/2,MinDist+20,'Minimum distance')
+% title(site)
 
 angle=[];
 time=[];
@@ -109,33 +94,19 @@ for n=1:Nboats
     dist=[dist,dist_boats{n}'];
 end
 
-% figure, plot(angle)
-% hold on, plot(dist); legend('angle (°)','distance (m)')
-% xlabel('#mesure')
-% line([0 length(angle)],[MinDist MinDist],'Color','k')
-% text(length(angle)/2,MinDist+20,'Minimum distance')
-% title([site ': données exploitées'])
-% if ~isempty(thetaexcluded)
-%     
-%     idxrange= ~(angle<thetaexcluded(2) & angle>thetaexcluded(1));
-%     angle=angle(idxrange);
-%     time=time(idxrange);
 R0=mean(dist);
 
 [fileList, wavID] = getWavName(time, folderIn);
 duraNs=5;
-% Ns = 2^14;              % Total number of sample
 buffer = 2.5;             % Time in second to add before the ptime
 
 Nhydro=20;
-% theta=0:10:350;
 Nangles=length(angle);
 
-%% Calculate lag from channel 1
-lag=zeros(Nangles,Nhydro);
-%     
-fe=10000;
-%%
+%% Calculate lags between Hi and H1
+
+lag=zeros(Nangles,Nhydro);    
+
 lag_max_h2h=3.5/c0;
 for iFile=1:Nangles
     disp([num2str(iFile) '/' num2str(Nangles)])
@@ -159,10 +130,10 @@ for iFile=1:Nangles
             lag(iFile,ii)=0;
         end
     end
-%             figure, plot(lags,r); title('fonction de corrélation')
-%             figure, plot(MAT_s(:,ii)); hold on, plot(MAT_s(:,1));legend('S1',['S' num2str(ii)])
+    %             figure, plot(lags,r); title('fonction de corrélation')
+    %             figure, plot(MAT_s(:,ii)); hold on, plot(MAT_s(:,1));legend('S1',['S' num2str(ii)])
     
-%         figure, plot(sigi); hold on, plot(sig1)
+    %         figure, plot(sigi); hold on, plot(sig1)
 end
 
 %%
@@ -198,11 +169,6 @@ for ii=1:20
 %     fitCoeffs = num2cell(coeffvalues(myfit));
 %      plot(sort(angleii),-fitCoeffs{1}*sind(sort(angleii))-fitCoeffs{2}*cosd(sort(angleii))-fitCoeffs{3}./distii)
 % hold on, plot(angleii,toto,'x')
-
-%     SineFunction=fittype('-A*sind(theta)-B*cosd(theta)-C','dependent',{'toto'},'independent',{'theta'},'coefficients',{'A','B','C'});
-%     [myfit, goodness, output] = fit(angleii',toto,SineFunction ,'StartPoint',[0,0,0],'robust','on','Lower',[-Inf -Inf -Zlim/(c0*R0/Z0)],'Upper',[Inf Inf Zlim/(c0*R0/Z0)] );
-%     plot(myfit,angleii,toto); title(['A=' num2str(myfit.A,3) ' B=' num2str(myfit.B,3) ' C=' num2str(myfit.C,3)])
-   
     
     if video
         frame=getframe(gcf) ;
@@ -222,7 +188,7 @@ daspect([1 1 1])
 for ii=1:Nhydro
     hold on;
     p2=plot(X(ii),Y(ii),'rx');
-    text(X(ii)+0.2,Y(ii),num2str(ii),'color','r')
+    text(X(ii)+0.2,Y(ii),num2str(ii))
 end
 
 Dx=max(X)-min(X);
@@ -260,6 +226,7 @@ Dz=max(Z)-min(Z);
 perim_th=2*pi*9.8;
 perimetre=sum(sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2));
 disth2h=sqrt((X-circshift(X,1,2)).^2+(Y-circshift(Y,1,2)).^2+(Z-circshift(Z,1,2)).^2);
+
 figure, 
 subplot(121),
 

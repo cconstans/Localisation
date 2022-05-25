@@ -1,16 +1,16 @@
-% t1=rand(1,20);
-% t2=rand(1,20);
-% theta1=10; % from AIS
-% theta2=80; % from AIS
-% Nhydro=20;
-% c0=1500;
-% load('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation_reseau\virtual_data\signal_211028_103451.mat');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Calcul des positions des hydrophones en fonction des temps d'arrivée de 2
+% signaux dont les positions [Ri, theta_i] sont connues, données virtuelles.
+
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+clear
+data='C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\virtual_data\signal_211028_103451.mat';
+load(data);
 
 R1=mean(t1)*c0;
 R2=mean(t2)*c0;
-
-% R1=R1_th;
-% R2=R2_th;
 
 M=[cosd(theta1) sind(theta1); cosd(theta2) sind(theta2)];
 if det(M)==0

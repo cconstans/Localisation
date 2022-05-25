@@ -1,6 +1,4 @@
 function [Y,Fs,time,audioInfo] = readBring(fileName, time,  varargin)
-% [Y,Fs,tstart,dura] = bringRead(fileName, time,  10, 'duration', 10, 'buffer',1)
-
 
 % Default parameter
 dura =15;
@@ -30,7 +28,6 @@ end
 % Read the file
 ainfo = audioinfo(fileName);
 Fs = ainfo.SampleRate;
-%[Y,Fs] = audioread(fileName);
 
 if ~exist('Ns')
     Ns = floor(dura * Fs);
@@ -43,21 +40,18 @@ if power2 == true
     dura = Ns / Fs;
 end
 
-
 % Get the begiining of the file
 [filepath,name] = fileparts(fileName);
 ftime = getFileTime(name);
 
 % Start and end time
 start = time - ftime;
-%tstart = ftime + start;
 istart = floor((seconds(start) - buffer) * Fs) ;
 iend = istart + Ns -1;
 
 
 if istart > 0 && iend < ainfo.TotalSamples
     [Y,Fs] = audioread(fileName,[istart iend]);
-    %Y = Y(istart:iend,:);
 elseif istart < 0
    % Loading the first file
    [fileName2 wavID] = getWavName(time - seconds(dura), fileparts(fileName)); 

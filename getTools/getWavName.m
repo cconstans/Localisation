@@ -1,8 +1,5 @@
-function [fileName wi] = getWavName(dateIn, folderIn)
+function [fileName, wi] = getWavName(dateIn, folderIn)
 %This load your wave file by specifying the folder, date and time
-%fileName = getWavName(datetime(2021,07,15,14,37,00),mypath)
-%
-%dateIn
 
 %Loading folderIn and files informations
 dirInfo = dir(folderIn);
@@ -36,8 +33,6 @@ for i=1:nbF
     dateString = splitName{3};
     dateN = datenum(dateString,formatIn);
     dateT(i,1) = datetime(dateN,'ConvertFrom', 'datenum');
-%     dateT(i,1) = datetime(str2num(dateString(1:4)),str2num(dateString(5:6)),str2num(dateString(7:8)),str2num(dateString(10:11)),...
-%         str2num(dateString(12:13)),str2num(dateString(14:15)));
     id{i} = splitName{4};
     
 end

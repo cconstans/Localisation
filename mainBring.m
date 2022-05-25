@@ -114,7 +114,6 @@ for ifile=1:length(fileList)
         for v = 1 : length(freq)
             vecPond = (matpondhf(:,v)');
             vecFFT  = matFFT(v,:);
-            %Energie(u) = Energie(u)+ (abs(sum(vec_pond.*vec_sfft)))^2;
             Energie(u) = Energie(u)+ 1/(spgm.ns*spgm.fs)*(abs(sum(vecPond.*vecFFT)))^2*df;
         end
     end
@@ -139,11 +138,6 @@ for ifile=1:length(fileList)
     % Printing figure
     showBring;
 end % end loop on file
-
-
-
-% Show global figure
-%showGlobalFig;
 
 
 % Saving data

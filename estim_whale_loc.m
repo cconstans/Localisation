@@ -1,3 +1,10 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A partir des résultats de beamforming sur 2 sites AAV et CLD pour un même
+% signal reçu de cétacé, donnant chacun une direction par rapport au site, calcul de la position de l'animal.
+
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 clear 
 AntenneCorrigee=1;
 % baleine='0408_9h_1';
@@ -59,15 +66,6 @@ R_T_km = 6378140/1000;% rayon de la terre en km
 
 x2 = R_T_km*(cosd(loc1(1))*(loc2(2)-loc1(2))*pi/180);
 y2 = R_T_km*(loc2(1)-loc1(1))*pi/180;
-
-% diff=ptimePRC(1)-ptimeMLB(1)
-% 
-% figure,  plot(ptime,angleMLB);
-% ylim([0 360]), 
-% hold on, plot(ptime,anglePRC);
-% datetick('x')
-% title('Angle')
-% legend('MLB','PRC')
 
 if angle1==90 || angle1==260
     y_whale=y1;

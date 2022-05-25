@@ -1,11 +1,15 @@
-clear
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Estimation de l'azimuth d'un cétacé à partir des enregistrements des hydrophones sur
+% une plage de temps choisie.
+% Le beamforming est inclus dans ce script.
 
-% Add all function located in the three to path
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 
-% Need to run data or just open it a .mat
-openData = false;
-% Path information : folderIn = wav folder / folderOut = figure output folder
+%% Paramètres
 typeHL = 'LF';
 AntenneCorrigee=1;
 DataSave=1;
@@ -26,14 +30,10 @@ baleine='PRC_0408_9h_1';
 % baleine='blue_CLD_1307_23h';
 % baleine='rorq_AAV_1407_4h';
 % baleine='rorq_CLD_1407_4h';
-duree = 2;              % Total number of sample
-
+duree = 2;    % s          
 fmin = 100;
 fmax = 200;
-
-get_whale_info;
-% Spectro parameter
-                
+          
 Ns = 2^16; 
 
 % Figure parameters
@@ -67,6 +67,8 @@ spgm.win.opad = 2;                  % [s] spectrogram zero padding
 spgm.im.fmin = spgm.im.freqlims(1);spgm.im.fmax = spgm.im.freqlims(2);
 
 %% BEAMFORMING
+get_whale_info;
+
 saveData=1;
 [arrLoc, arr] = getArrInfo(arrID,AntenneCorrigee);
 
@@ -76,7 +78,6 @@ convPW.SH =-194;      % Parameter for power convertion
 convPW.G = 40;
 convPW.D = 1;
 
-
 %% Beamforming
 
 disp('Executing beamforming ')
@@ -84,7 +85,6 @@ close all
 
 % Reading wav and extract values
 [wav.s,wav.fs, time_s, audioInfo] = readBring(file_wav, ptime,'duration',spgm.im.dur,'buffer',buffer);
-%file_wav = fileList{ifile};     % file name alone
 spgm.fs = wav.fs; spgm.ns =  audioInfo.Ns; spgm.im.ns= spgm.ns; spgm.im.dur = audioInfo.dura;
 spgm = getSpgmWin(spgm);        % Get spectograme windows parameter
 
@@ -124,7 +124,6 @@ for u = 1 : length(azimut360)
     for v = 1 : length(freq)
         vecPond = (matpondhf(:,v)');
         vecFFT  = matFFT(v,:);
-        %Energie(u) = Energie(u)+ (abs(sum(vec_pond.*vec_sfft)))^2;
         Energie(u) = Energie(u)+ 1/(spgm.ns*spgm.fs)*(abs(sum(vecPond.*vecFFT)))^2*df;
     end
 end
@@ -152,28 +151,3 @@ hydrofile=arr.hydrofile;
 if DataSave
     save([folderOut '.mat'],'folderOut','hydrofile','baleine','wav','c0','angleA','angleM','ptime','spgm','Energie','minute','duree','arrID','fmin','fmax','AntenneCorrigee')
 end
-% %%
-% 
-% % [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
-% %     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
-% 
-% [angle, dist] = getRealAngle(arrID , vec_lat_ship, vec_long_ship);
-% idx_deb=find(vec_temps_ship/(24*3600)>=datenum(ptime(1)),1); 
-% idx_fin=find(vec_temps_ship/(24*3600)>datenum(ptime(end)),1);
-% if isempty(idx_fin) idx_fin=length(vec_temps_ship); end
-% 
-% figure
-% pcolor(arrIncol(datenum(ptime)), 1:360, 10*log10(matEnergie'))
-% shading flat
-% cb = colorbar('location','eastoutside');
-% ylabel(cb, 'Energy (dB)');
-% colormap jet
-% hold on
-% hm = plot(ptime,angleM,'o','color','k','markersize',3,'markerfacecolor','k');hold on
-% hm2 = plot(vec_temps_ship(idx_deb:idx_fin)/(24*3600),angle(idx_deb:idx_fin),'k','LineWidth',2);
-% 
-% if AntenneCorrigee
-%     title([ bateau ' ' arrID ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz'])
-% else
-%     title([ bateau ' ' arrID, ' f=[' num2str(fmin) '-' num2str(fmax) '] Hz non corrigée ' ])
-% end

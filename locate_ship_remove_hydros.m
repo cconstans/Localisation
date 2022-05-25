@@ -1,11 +1,15 @@
-clear
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Estimation de l'azimuth d'un bateau à partir des enregistrements d'une partie des hydrophones à définir sur
+% une plage de temps définie et comparaison avec les données AIS.
+% Appelle le script de beamforming mainBring_remove_hydros
 
-% Add all function located in the three to path
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\'));
 
-% Need to run data or just open it a .mat
-openData = false;
-% Path information : folderIn = wav folder / folderOut = figure output folder
+%% Paramètres
 typeHL = 'LF';
 AntenneCorrigee=1;
 DataSave=1;
@@ -21,7 +25,7 @@ hydros2remove=C(k,:);
 % fmax = 1800;
 fmin = 50;
 fmax = 300;
-
+%%
 [ship_AIS_file,mois,jour,heure, minute, duree,distance_ship,loc_site,mmsi_ship,vec_lat_ship,...
     vec_long_ship,vec_temps_ship,x_ship_km,y_ship_km,folderIn]=get_ship_info(bateau,arrID);
 
@@ -37,7 +41,6 @@ end
 
 % Figure parameters
 showFig = [ ]       % Figure number to print
-% showFig = [ ]       % Figure number to print
 printFig = false;    % Saving figure to a folder
 nbPk = 4 ;          % Nomber of side lobe to keep
 

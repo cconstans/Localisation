@@ -1,52 +1,63 @@
-% Using all angles to compute matrix
-% add opportunity boats
-%% Spectro
-% config='case_BB_WENZ_RSB_-20dB';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Calcul des positions des hydrophones (AAV, CLD, MLB ou PRC) en fonction
+% des données AIS de bateaux d'opportunités selectionnés pour leur fort
+% signal, comparées aux signaux enregistrés sur leur période de passage.
+% Le fit des données prend en compte la distance du bateau, contrairement à
+% v5. L'ordre des hydrophones peut être modifié pour le calcul des lags.
+
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 clear
 addpath(genpath('C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation'));
+%% Paramètres
 
-site='AAV';
+site='PRC';
 video=0;
-% method=1; %0: supress angles when 1 hydro is overlagged. 1: suppress only overlags.
-
 typeHL='LF';
 c0=1480;
-% origin=10;
+MinDist=400; % minimum distance for plane wave approx
+MaxDist=10e3; % maximum distance for clear signal
+Zlim=1; % Z=Z1+/- Zlim
+hydro_ref=11; % hydrophone à partir duquel on calcul le lag
+%%
 
 switch site
     case 'AAV'
-        folderIn = ['G:/Bring_Dep_1_Wav/' site '/' typeHL '/']; % Local Mac folder
-        startID=83; % take points from startID
-        thetaexcluded=[];
+        folderIn = ['G:/Bring_Dep_1_Wav/' site '/' typeHL '/'];
         Z0=39.1;
-%         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_2107_5_7h.mat',...
-           ship_AIS_file={ 'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_AAV_1907_2_4h',...
-            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_AAV_1907_10_12h',...
-             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_1807_10_13h',...
-             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\GOLDENICE_AAV_1607_2_4h.mat'};
-          timelim=[ datenum(2021,07,19,2,15,0)*24*3600,datenum(2021,07,19,3,15,0)*24*3600 ;...
-%             datenum(2021,07,19,14,55,0)*24*3600,datenum(2021,07,19,15,13,0)*24*3600;...
-            datenum(2021,07,19,10,10,0)*24*3600,datenum(2021,07,19,10,50,0)*24*3600;...
-            datenum(2021,07,18,11,45,0)*24*3600,datenum(2021,07,18,12,45,0)*24*3600;...
-            datenum(2021,07,16,2,55,0)*24*3600,datenum(2021,07,16,4,30,0)*24*3600];
-
+        ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_AAV_1807_10_13h.mat',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_AAV_1907_2_4h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\HELENAG_AAV_2107_13_17h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\HLSINES_AAV_2107_19_22h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\STARAYESHA_AAV_2207_22_25h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_AAV_1907_10_12h'};
+        timelim=[datenum(2021,07,18,11,45,0)*24*3600,datenum(2021,07,18,12,45,0)*24*3600;...
+            datenum(2021,07,19,2,20,0)*24*3600,datenum(2021,07,19,3,15,0)*24*3600 ;...
+            datenum(2021,07,21,15,0,0)*24*3600,datenum(2021,07,21,16,0,0)*24*3600 ;...
+            datenum(2021,07,21,20,20,0)*24*3600,datenum(2021,07,21,21,50,0)*24*3600 ;...
+            datenum(2021,07,22,22,16,0)*24*3600,datenum(2021,07,23,0,35,0)*24*3600 ;...
+            datenum(2021,07,19,10,25,0)*24*3600,datenum(2021,07,19,10,50,0)*24*3600];
+        
     case 'CLD'
-        folderIn = ['D:/Bring_Dep_1_Wav/' site '/' typeHL '/'];
-        startID=1;
-        thetaexcluded=[];
+        folderIn = ['G:/Bring_Dep_1_Wav/' site '/' typeHL '/'];
         Z0=43.6;
-       ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_CLD_1807_10_12h.mat',...
+        ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\NACCQUEBEC_CLD_1807_10_12h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\QAMUTIK_CLD_1907_0_3h',...
-            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316003726_CLD_1907_8_10h'};
-%             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\BEVERLYMI_CLD_2307_6_8h'};
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MARJORIEK_CLD_1907_10_13h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\HELENAG_CLD_2107_13_15h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\HLSINES_CLD_2107_18_20h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\MAERSKPATRAS_CLD_2307_23_26h',...
+            'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\STARBORNEO_CLD_2407_12_15h'};
         timelim=[datenum(2021,07,18,10,20,0)*24*3600,datenum(2021,07,18,11,20,0)*24*3600;...
             datenum(2021,07,19,1,17,0)*24*3600,datenum(2021,07,19,2,07,0)*24*3600 ;...
-            datenum(2021,07,19,9,12,0)*24*3600,datenum(2021,07,19,9,35,0)*24*3600];
-%             datenum(2021,07,23,7,15,0)*24*3600,datenum(2021,07,23,7,40,0)*24*3600];
+            datenum(2021,07,19,11,30,0)*24*3600,datenum(2021,07,19,12,40,0)*24*3600;...
+            datenum(2021,07,21,14,0,0)*24*3600,datenum(2021,07,21,15,0,0)*24*3600;...
+            datenum(2021,07,21,19,20,0)*24*3600,datenum(2021,07,21,20,30,0)*24*3600;...
+            datenum(2021,07,23,23,30,0)*24*3600,datenum(2021,07,24,1,50,0)*24*3600;...
+            datenum(2021,07,24,12,50,0)*24*3600,datenum(2021,07,24,15,0,0)*24*3600];
     case 'MLB'
-        folderIn = ['F:\Bring_Dep_2\' site '_wav\'];
-        startID=1001;
-        thetaexcluded=[];
+        folderIn = ['G:\Bring_Dep_2\' site '_wav\'];
         Z0=37.1;
         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_MLB_1608_7_9h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_MLB_508_6_9h.mat',...
@@ -58,9 +69,7 @@ switch site
             datenum(2021,08,14,22,04,0)*24*3600,datenum(2021,08,14,23,45,0)*24*3600;...
             datenum(2021,08,1,5,45,0)*24*3600,datenum(2021,08,1,8,9,0)*24*3600];
     case 'PRC'
-        folderIn = ['H:\Bring_Dep_2\' site '_wav\'];
-        startID=1;
-        thetaexcluded=[];
+        folderIn = ['G:\Bring_Dep_2\' site '_wav\'];
         Z0=40.7;
         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316006850_PRC_1608_7_9h.mat',...
             'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat',...
@@ -70,24 +79,10 @@ switch site
             datenum(2021,08,5,7,0,0)*24*3600,datenum(2021,08,5,7,50,0)*24*3600;...
             datenum(2021,08,14,22,04,0)*24*3600,datenum(2021,08,14,23,45,0)*24*3600;...
             datenum(2021,08,1,5,45,0)*24*3600,datenum(2021,08,1,8,9,0)*24*3600];
-%         ship_AIS_file={'C:\Users\CHARLOTTE\Documents\MATLAB\AIS_TOOLBOX\SHIPS\316034372_PRC_508_6_9h.mat'};
-%         timelim=[datenum(2021,08,5,7,0,0)*24*3600,datenum(2021,08,5,7,40,0)*24*3600;];
 end
 
 Nboats=length(ship_AIS_file);
 filename=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\Data loc\'  site '_' datestr(now, 'yymmdd') '_v6_c0=' num2str(c0) ' ' num2str(Nboats) '_boats' ];
-
-BoatInfo=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\boatTrack\' site 'CircleTrack.mat'];
-
-% load(BoatInfo);
-MinDist=400; % minimum distance for plane wave approx
-MaxDist=10e3; % maximum distance for clear signal
-
-% if startID
-%     angle(1:startID-1)=[];
-%     time(1:startID-1)=[];
-%     dist(1:startID-1)=[];
-% end
 
 for n=1:Nboats
     load(ship_AIS_file{n})
@@ -105,25 +100,7 @@ for n=1:Nboats
     angle_boats{n}=anglen;
     dist_boats{n}=distn;
     time_boats{n}=timen;
-    
-%     size(anglen)
-%     figure, plot(anglen); 
-%     max(distn)
-%     min(distn)
 end
-
-
-% figure,
-% for n=1:Nboats
-%     plot(angle_boats{n});
-%     hold on, plot(dist_boats{n});
-%     hold on
-% end
-% legend('angle1 (°)','distance1 (m)','angle2 (°)','distance2 (m)','angle3 (°)','distance3 (m)','angle4 (°)','distance4 (m)')
-% xlabel('#mesure')
-% line([0 length(angle_boats{n})],[MinDist MinDist],'Color','k')
-% text(length(angle_boats{n})/2,MinDist+20,'Minimum distance')
-% title(site)
 
 angle=[];
 time=[];
@@ -141,29 +118,20 @@ end
 % line([0 length(angle)],[MinDist MinDist],'Color','k')
 % text(length(angle)/2,MinDist+20,'Minimum distance')
 % title([site ': données exploitées'])
-% if ~isempty(thetaexcluded)
-%     
-%     idxrange= ~(angle<thetaexcluded(2) & angle>thetaexcluded(1));
-%     angle=angle(idxrange);
-%     time=time(idxrange);
+
 R0=mean(dist);
 
 [fileList, wavID] = getWavName(time, folderIn);
 duraNs=5;
-% Ns = 2^14;              % Total number of sample
 buffer = 2.5;             % Time in second to add before the ptime
 
 Nhydro=20;
-% theta=0:10:350;
 Nangles=length(angle);
 
 %% Calculate lag from channel 1
-lag3=zeros(Nangles,Nhydro);
-%     
-fe=10000;
-%%
-% order=circshift((1:20)',origin);
-order=1:20;
+lag=zeros(Nangles,Nhydro);
+order=circshift((1:20)',hydro_ref);
+
 lag_max_h2h=3.5/c0;
 for iFile=1:Nangles
     disp([num2str(iFile) '/' num2str(Nangles)])
@@ -174,19 +142,17 @@ for iFile=1:Nangles
     for ii=1:Nhydro
         
         if ii>1
-            if ~isnan(lag3(iFile,ii-1))
+            if ~isnan(lag(iFile,ii-1))
                 [r,lags] =xcorr(MAT_s(:,order(ii)),MAT_s(:,order(ii-1)));
                 lagh2h=lags(r==max(r))/fe;
                 if abs(lagh2h)<lag_max_h2h
-                    lag3(iFile,ii)=lagh2h+lag3(iFile,ii-1);
-                else lag3(iFile,ii)=nan;
+                    lag(iFile,ii)=lagh2h+lag(iFile,ii-1);
+                else lag(iFile,ii)=nan;
                 end
-            else lag3(iFile,ii)=nan;
+            else lag(iFile,ii)=nan;
             end
         else
-            %                 [r,lags] =xcorr(MAT_s(:,ii),MAT_s(:,Nhydro));
-            %                 lag(iFile,ii)=lags(r==max(r))/fe;
-            lag3(iFile,ii)=0;
+            lag(iFile,ii)=0;
         end
     end
 %             figure, plot(lags,r); title('fonction de corrélation')
@@ -198,23 +164,6 @@ end
 %%
 clear MAT_s lags r
 save(filename);
-%%
-
-% Dmax=22;
-% lagmax=Dmax/c0; % correspond à un diamètre max de 22m
-% 
-% 
-% falselags=abs(lag)>lagmax;
-% 
-% lag_clean=lag;
-% lag_clean(falselags)=NaN;
-% 
-% L=zeros(Nangles,1);
-% for it=1:Nangles
-%     L(it)=mean(lag_clean(it,~isnan(lag_clean(it,:))));
-% end
-
-lag_clean=lag3;
 
 %%
 X=zeros(1,Nhydro);
@@ -225,7 +174,6 @@ if video
     writerObj.FrameRate = 2;
     open(writerObj);
 end
-Zlim=1; % Z=Z1+/- Zlim
 figure,
 %%
 for ii=1:20
@@ -234,7 +182,7 @@ for ii=1:20
     %     plot(angle,lag(:,ii),'x');ylim([-lagmax lagmax]*2)
     %     hold on, plot(angle,lag_clean(:,ii),'x');
     
-    toto=lag_clean(:,ii);
+    toto=lag(:,ii);
     angleii=angle(~isnan(toto));
     toto=toto(~isnan(toto));
     distii=dist(~isnan(toto));
@@ -245,12 +193,7 @@ for ii=1:20
 
     fitCoeffs = num2cell(coeffvalues(myfit));
      plot(sort(angleii),-fitCoeffs{1}*sind(sort(angleii))-fitCoeffs{2}*cosd(sort(angleii))-fitCoeffs{3}./distii)
-hold on, plot(angleii,toto,'x')
-
-%     SineFunction=fittype('-A*sind(theta)-B*cosd(theta)-C','dependent',{'toto'},'independent',{'theta'},'coefficients',{'A','B','C'});
-%     [myfit, goodness, output] = fit(angleii',toto,SineFunction ,'StartPoint',[0,0,0],'robust','on','Lower',[-Inf -Inf -Zlim/(c0*R0/Z0)],'Upper',[Inf Inf Zlim/(c0*R0/Z0)] );
-%     plot(myfit,angleii,toto); title(['A=' num2str(myfit.A,3) ' B=' num2str(myfit.B,3) ' C=' num2str(myfit.C,3)])
-   
+     hold on, plot(angleii,toto,'x')
     
     if video
         frame=getframe(gcf) ;

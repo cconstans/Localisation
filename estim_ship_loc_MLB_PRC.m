@@ -1,5 +1,12 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A partir des résultats de beamforming des 2 sites PRC et MLB pour un même
+% bateau, donnant chacun une direction par rapport au site, calcul de la position du bateau.
+
+% Charlotte Constans 05/22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 clear 
-AntenneCorrigee=0;
+AntenneCorrigee=1;
 bateau='SAMUELRISLEY';
 switch bateau
     case 'SAMUELRISLEY'
@@ -84,12 +91,6 @@ anglePRC=angleM;
 [ptime,id_mlb,id_prc]=intersect(ptimeMLB,ptimePRC);
 anglePRC=anglePRC(id_prc);
 angleMLB=angleMLB(id_mlb);
-% mois=8;
-% jour=16;
-% hstart=heure;
-% minstart=minute;
-% secstart=0;
-% tstart=datetime(2021,mois,jour,hstart,minstart,secstart);
 
 load(ship_AIS_PRC);
 [anglePRC_ais, distPRC_ais] = getRealAngle(arrID , vec_lat_ship, vec_long_ship);
@@ -108,28 +109,13 @@ R_T_km = 6378140/1000;% rayon de la terre en km
 x_PRC = R_T_km*(cosd(loc_MLB(1))*(loc_PRC(2)-loc_MLB(2))*pi/180);
 y_PRC = R_T_km*(loc_PRC(1)-loc_MLB(1))*pi/180;
 
-% diff=ptimePRC(1)-ptimeMLB(1)
-% 
-% figure,  plot(ptime,angleMLB);
-% ylim([0 360]), 
-% hold on, plot(ptime,anglePRC);
-% datetick('x')
-% title('Angle')
-% legend('MLB','PRC')
-
 det=tand(anglePRC)-tand(angleMLB);
 y_ship=1./det.*(-x_PRC+tand(anglePRC)*y_PRC);
 x_ship=y_ship.*tand(angleMLB);
 
 dist2MLB=sqrt(x_ship.^2+y_ship.^2);
 dist2PRC=sqrt((x_ship-x_PRC).^2+(y_ship-y_PRC).^2);
-% 
-% figure,
-% plot(ptime,dist2MLB);
-% hold on, plot(ptime,dist2PRC);
-% title('Distance')
-% legend('MLB','PRC')
-% 
+
 figure,plot(vec_temps_ship/(24*3600),distPRC_ais/1e3,'k')
 hold on, plot(ptime,dist2PRC,'k.');
 hold on, plot(vec_temps_ship/(24*3600),distMLB_ais/1e3,'r')
@@ -178,7 +164,6 @@ else
     title([ 'Azimuth antenne non corrigée'])
 end
 
-
 folderOut=['C:\Users\CHARLOTTE\Documents\MATLAB\Bring\Localisation\results\estim_loc_' bateau ];
 if ~AntenneCorrigee
     folderOut=[folderOut,'_circ'];
@@ -189,12 +174,3 @@ delta_long=x_ship/R_T_km*180/pi/cosd(loc_MLB(1));
 lat_ship=loc_MLB(1)+delta_lat;
 long_ship=loc_MLB(2)+delta_long;
 save(folderOut,'vec_temps_ship','x_ship','y_ship','lat_ship','long_ship','anglePRC','angleMLB','dist2PRC','dist2MLB','distPRC_ais','distMLB_ais','anglePRC_ais','angleMLB_ais','ptime');
-%%
-% dist_estime_PRC=dist2PRC*1e3;
-% dist_estime_MLB=dist2MLB*1e3;
-% vec_temps_estime=ptime;
-% anglePRC_estime=anglePRC;
-% angleMLB_estime=angleMLB;
-% vec_temps_ais=vec_temps_ship;
-% save('Data_cedric.mat','vec_temps_estime','vec_temps_ais','anglePRC_ais','angleMLB_ais','anglePRC_estime','angleMLB_estime',...
-%     'distPRC_ais','distMLB_ais','dist_estime_MLB','dist_estime_PRC');
